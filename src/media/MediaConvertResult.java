@@ -1,6 +1,6 @@
 package media;
 
-import command.executor.ExecuteResult;
+import executor.ExecuteResult;
 
 import java.io.File;
 import java.text.NumberFormat;

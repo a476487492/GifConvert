@@ -1,4 +1,4 @@
-package command.executor;
+package executor;
 
 import java.util.List;
 

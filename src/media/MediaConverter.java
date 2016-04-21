@@ -1,8 +1,8 @@
 package media;
 
 import com.sun.istack.internal.NotNull;
-import command.executor.ExecuteResult;
-import command.executor.Executor;
+import executor.ExecuteResult;
+import executor.Executor;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;

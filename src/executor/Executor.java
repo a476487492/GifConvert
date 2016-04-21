@@ -1,4 +1,4 @@
-package command.executor;
+package executor;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

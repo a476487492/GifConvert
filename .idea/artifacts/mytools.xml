@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="mytools">
+    <output-path>$PROJECT_DIR$/out/artifacts/mytools</output-path>
+    <root id="archive" name="mytools.jar">
+      <element id="dir-copy" path="$PROJECT_DIR$/out/production/GifConvert/ui" />
+      <element id="dir-copy" path="$PROJECT_DIR$/out/production/GifConvert/util" />
+      <element id="dir-copy" path="$PROJECT_DIR$/out/production/GifConvert/executor" />
+    </root>
+  </artifact>
+</component>

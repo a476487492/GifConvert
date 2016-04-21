@@ -1,6 +1,6 @@
 package media;
 
-import command.executor.Parameters;
+import executor.Parameters;
 
 import java.io.File;
 import java.util.ArrayList;
