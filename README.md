@@ -17,7 +17,9 @@
 # 代码
 
 /src/command/ 目录下是Windows调用控制台的实现
+
 /src/media/ (使用了 /src/command/) 目录下是视频转换gif图片的实现
+
 /src/util/ 目录下是一个单线程线程池的实现，和Java API中的单线程线程池的不同是可以选择去除特定标记的线程
 
 # 可用的release
