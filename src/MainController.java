@@ -322,6 +322,9 @@ public class MainController implements Initializable {
 
     private void reloadMediaInfo() {
         Looper.removeMessage(MSG_RELOAD_MEDIA_INFO);
+        if (inputMedia.get() == null) {
+            return;
+        }
         Looper.postMessage(new ReloadMediaInfoTask());
     }
 

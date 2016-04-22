@@ -78,11 +78,12 @@ public class Executor {
             List<String> messages = new ArrayList<>();
             BufferedReader reader = new BufferedReader(new InputStreamReader(executor.getInputStream()));
             while (true) {
-                status.set(reader.readLine());
-                if (status.get() == null) {
+                String message = reader.readLine();
+                if (message == null) {
                     break;
                 }
 
+                status.set(message);
                 if (needMessages) {
                     messages.add(status.get());
                 }
