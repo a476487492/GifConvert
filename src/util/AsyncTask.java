@@ -5,8 +5,6 @@ import javafx.application.Platform;
 
 public abstract class AsyncTask<R> extends Task {
 
-    private final Exception trace = new Exception();
-
     public abstract void preTaskOnUi();
 
     public abstract R runTask();
@@ -14,9 +12,9 @@ public abstract class AsyncTask<R> extends Task {
     public abstract void postTaskOnUi(R result);
 
     @Override
-    public void run() {
+    public final void run() {
         if (Debug.ENABLE) {
-            trace.printStackTrace();
+            new Exception().printStackTrace();
         }
 
         Platform.runLater(new Runnable() {

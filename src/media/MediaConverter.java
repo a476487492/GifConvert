@@ -55,7 +55,6 @@ public class MediaConverter extends Executor {
                         updateProgressOnUIiThread(duration / convertInfo.getConvertDuration());
                     }
                 }
-
             }
 
         };

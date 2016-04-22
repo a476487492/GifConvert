@@ -85,7 +85,7 @@ public class Executor {
 
                 status.set(message);
                 if (needMessages) {
-                    messages.add(status.get());
+                    messages.add(message);
                 }
             }
 
@@ -111,10 +111,11 @@ public class Executor {
             return;
         }
 
+        isCanceled = true;
         new Thread() {
 
             public void run() {
-                ArrayList command = new ArrayList();
+                ArrayList<String> command = new ArrayList<>();
                 command.add("taskkill");
                 command.add("/F");
                 command.add("/IM");
@@ -128,8 +129,6 @@ public class Executor {
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
-
-                isCanceled = true;
             }
         }.start();
     }

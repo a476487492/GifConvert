@@ -16,7 +16,7 @@ public class MediaInfo {
 
     private static final Pattern VIDEO_DURATION_PATTERN = Pattern.compile("Duration: (?<duration>\\S+)", Pattern.CASE_INSENSITIVE);
 
-    public static MediaInfo INVALID = new MediaInfo(new ArrayList<>());
+    public final static MediaInfo INVALID = new MediaInfo(new ArrayList<>());
 
     private final Point videoSize;
 

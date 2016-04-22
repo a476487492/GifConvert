@@ -6,11 +6,11 @@ public class ExecuteResult {
 
     protected final long costTime;
 
-    protected final boolean success;
+    private final boolean success;
 
-    protected final boolean canceled;
+    private final boolean canceled;
 
-    protected final List<String> messages;
+    private final List<String> messages;
 
     public ExecuteResult(boolean success, boolean canceled, long costTime, List<String> messages) {
         this.success = success;

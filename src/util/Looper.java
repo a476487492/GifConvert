@@ -89,7 +89,7 @@ public class Looper {
             looper.lock.notifyAll();
         }
 
-        if (looper.currentTask != null) {
+        if (looper.currentTask != null && looper.currentTask.getId() == id) {
             looper.currentTask.cancel();
         }
     }
