@@ -16,7 +16,7 @@ public class MediaConverter extends Executor {
 
     private static final String CONVERTER_NAME = "ffmpeg-20160213-git-588e2e3-win64-static.exe";
 
-    private static final Pattern CONVERT_PROGRESS_PATTERN = Pattern.compile("frame=.+ fps=.+ q=.+ (size|Lsize)=.+ time=(?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2}).+ bitrate=.+", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PROGRESS_PATTERN = Pattern.compile("time=(?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})\\.(?<millsecond>\\d{2})", Pattern.CASE_INSENSITIVE);
 
     private DoubleProperty progress = new SimpleDoubleProperty(Double.NaN);
 
@@ -48,11 +48,14 @@ public class MediaConverter extends Executor {
                     return;
                 }
 
-                Matcher matcher = CONVERT_PROGRESS_PATTERN.matcher(newValue);
-                if (matcher.matches()) {
-                    final double duration = Integer.parseInt(matcher.group("hour")) * 60 * 60 + Integer.parseInt(matcher.group("minute")) * 60 + Integer.parseInt(matcher.group("second"));
-                    updateProgressOnUIiThread(duration / convertInfo.getConvertDuration());
+                for (String split : newValue.split(" ")) {
+                    Matcher matcher = PROGRESS_PATTERN.matcher(split);
+                    if (matcher.matches()) {
+                        final double duration = Integer.parseInt(matcher.group("hour")) * 60 * 60 + Integer.parseInt(matcher.group("minute")) * 60 + Integer.parseInt(matcher.group("second"));
+                        updateProgressOnUIiThread(duration / convertInfo.getConvertDuration());
+                    }
                 }
+
             }
 
         };

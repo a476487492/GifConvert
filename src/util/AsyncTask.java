@@ -3,7 +3,7 @@ package util;
 import debug.Debug;
 import javafx.application.Platform;
 
-public abstract class MessageTask<R> extends Message {
+public abstract class AsyncTask<R> extends Task {
 
     private final Exception trace = new Exception();
 
@@ -40,7 +40,7 @@ public abstract class MessageTask<R> extends Message {
         });
     }
 
-    public MessageTask(Object id, long delay) {
+    public AsyncTask(Object id, long delay) {
         super(id, delay);
     }
 

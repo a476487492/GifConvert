@@ -2,12 +2,12 @@ package util;
 
 import com.sun.istack.internal.NotNull;
 
-public abstract class Message implements Comparable<Message> {
+public abstract class Task implements Comparable<Task> {
 
     private final Long timeRunAt;
     private final Object id;
 
-    public Message(Object id, long delay) {
+    public Task(Object id, long delay) {
         this.id = id;
         this.timeRunAt = delay + System.currentTimeMillis();
     }
@@ -25,7 +25,7 @@ public abstract class Message implements Comparable<Message> {
     }
 
     @Override
-    public int compareTo(@NotNull Message o) {
+    public int compareTo(@NotNull Task o) {
         return timeRunAt.compareTo(o.timeRunAt);
     }
 

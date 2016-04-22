@@ -106,4 +106,32 @@ public class Executor {
         }
     }
 
+    public void forceCancel() {
+        if (this.executor == null) {
+            return;
+        }
+
+        new Thread() {
+
+            public void run() {
+                ArrayList command = new ArrayList();
+                command.add("taskkill");
+                command.add("/F");
+                command.add("/IM");
+                command.add(executorName);
+                command.add("/T");
+                ProcessBuilder processBuilder = new ProcessBuilder(command);
+
+                try {
+                    Process e = processBuilder.start();
+                    e.waitFor();
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
+                }
+
+                isCanceled = true;
+            }
+        }.start();
+    }
+
 }

@@ -26,7 +26,7 @@ import org.controlsfx.control.ToggleSwitch;
 import ui.SmartFileChooser;
 import ui.ValueAnimator;
 import util.Looper;
-import util.MessageTask;
+import util.AsyncTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -194,7 +194,11 @@ public class MainController implements Initializable {
         SmartFileChooser fileChooser = new SmartFileChooser();
         fileChooser.addExtensionFilters(new FileChooser.ExtensionFilter("视频文件", GifConvertParameters.SUPPORT_VIDEO_FORMAT));
         fileChooser.addExtensionFilters(new FileChooser.ExtensionFilter("所有文件", "*.*"));
-        inputMedia.set(fileChooser.showOpenDialog(outputPreviewView.getScene().getWindow()));
+
+        File chooseFile = fileChooser.showOpenDialog(outputPreviewView.getScene().getWindow());
+        if (chooseFile != null) {
+            inputMedia.set(chooseFile);
+        }
     }
 
     @FXML
@@ -299,7 +303,7 @@ public class MainController implements Initializable {
     }
 
     private void reloadMediaConvert(long delay) {
-        Looper.removeMessage(MSG_CONVERT_MEDIA);
+        Looper.removeTask(MSG_CONVERT_MEDIA);
 
         notificationPane.hide();
 
@@ -321,7 +325,7 @@ public class MainController implements Initializable {
     }
 
     private void reloadMediaInfo() {
-        Looper.removeMessage(MSG_RELOAD_MEDIA_INFO);
+        Looper.removeTask(MSG_RELOAD_MEDIA_INFO);
         if (inputMedia.get() == null) {
             return;
         }
@@ -353,11 +357,11 @@ public class MainController implements Initializable {
     private void showNotificationForAWhile(String message) {
         notificationPane.show(message);
 
-        Looper.removeMessage(MSG_HIDE_NOTIFICATION);
+        Looper.removeTask(MSG_HIDE_NOTIFICATION);
         Looper.postMessage(new HideNotificationTask(3000));
     }
 
-    private class HideNotificationTask extends MessageTask<Void> {
+    private class HideNotificationTask extends AsyncTask<Void> {
 
         public HideNotificationTask(long delay) {
             super(MSG_HIDE_NOTIFICATION, delay);
@@ -383,7 +387,7 @@ public class MainController implements Initializable {
 
     }
 
-    private class ReloadMediaInfoTask extends MessageTask<Void> {
+    private class ReloadMediaInfoTask extends AsyncTask<Void> {
 
         public ReloadMediaInfoTask() {
             super(MSG_RELOAD_MEDIA_INFO, 0);
@@ -412,7 +416,7 @@ public class MainController implements Initializable {
 
     }
 
-    private class ConvertMediaTask extends MessageTask<MediaConvertResult> {
+    private class ConvertMediaTask extends AsyncTask<MediaConvertResult> {
 
         public ConvertMediaTask(long delay) {
             super(MSG_CONVERT_MEDIA, delay);
