@@ -321,7 +321,7 @@ public class MainController implements Initializable {
             return;
         }
 
-        Looper.postMessage(new ConvertMediaTask(delay));
+        Looper.postTask(new ConvertMediaTask(delay));
     }
 
     private void reloadMediaInfo() {
@@ -329,7 +329,7 @@ public class MainController implements Initializable {
         if (inputMedia.get() == null) {
             return;
         }
-        Looper.postMessage(new ReloadMediaInfoTask());
+        Looper.postTask(new ReloadMediaInfoTask());
     }
 
     private void showLoadingImage() {
@@ -358,7 +358,7 @@ public class MainController implements Initializable {
         notificationPane.show(message);
 
         Looper.removeTask(MSG_HIDE_NOTIFICATION);
-        Looper.postMessage(new HideNotificationTask(3000));
+        Looper.postTask(new HideNotificationTask(3000));
     }
 
     private class HideNotificationTask extends AsyncTask<Void> {

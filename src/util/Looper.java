@@ -67,7 +67,7 @@ public class Looper {
         thread.start();
     }
 
-    public static void postMessage(Task task) {
+    public static void postTask(Task task) {
         final Looper looper = myLoop();
         synchronized (looper.lock) {
             looper.tasks.add(task);
