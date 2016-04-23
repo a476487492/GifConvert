@@ -13,7 +13,7 @@ public abstract class AsyncTask<R> extends Task {
 
     @Override
     public final void run() {
-        if (Debug.ENABLE) {
+        if (Debug.LOG) {
             new Exception().printStackTrace();
         }
 

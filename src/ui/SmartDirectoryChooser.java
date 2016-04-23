@@ -14,10 +14,12 @@ public class SmartDirectoryChooser {
     public File show(final Window ownerWindow) {
         directoryChooser.setInitialDirectory(DirectoryRecord.get(getClass()));
         File directory = directoryChooser.showDialog(ownerWindow);
+
         if (directory != null) {
             DirectoryRecord.set(getClass(), directory);
             lastDirectory.set(directory);
         }
+
         return directory;
     }
 

@@ -70,7 +70,6 @@ public class Executor {
             command.add(executorFile.getAbsolutePath());
             command.addAll(parameters.build());
             ProcessBuilder processBuilder = new ProcessBuilder(command);
-//            processBuilder.directory(executorFile.getParentFile());
             processBuilder.redirectErrorStream(true);
             executor = processBuilder.start();
             isCanceled = false;
@@ -100,10 +99,12 @@ public class Executor {
     }
 
     public void cancel() {
-        if (executor != null) {
-            isCanceled = true;
-            executor.destroy();
+        if (executor == null) {
+            return;
         }
+
+        isCanceled = true;
+        executor.destroy();
     }
 
     public void forceCancel() {
@@ -130,6 +131,7 @@ public class Executor {
                     e.printStackTrace();
                 }
             }
+
         }.start();
     }
 
