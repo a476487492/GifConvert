@@ -50,7 +50,7 @@ public class Executor {
     private void ensureExecutorAvailable() {
         if (executorFile.exists()) {
             if (Debug.LOG) {
-                System.out.print("executor exists");
+                System.out.println("executor exists");
             }
             return;
         }
