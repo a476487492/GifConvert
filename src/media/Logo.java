@@ -17,8 +17,7 @@ public class Logo {
     public File create() {
         File logoFile = new File(System.getProperty("java.io.tmpdir"), "ffmpeg-logo.png");
         Font font = new Font("微软雅黑", Font.PLAIN, 15);
-        FontMetrics fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(font);
-
+        FontMetrics fontMetrics = new Canvas().getFontMetrics(font);
         BufferedImage bufferedImage = new BufferedImage(fontMetrics.stringWidth(logo), fontMetrics.getAscent() + fontMetrics.getDescent(), BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = bufferedImage.getGraphics();
         graphics.setFont(font);

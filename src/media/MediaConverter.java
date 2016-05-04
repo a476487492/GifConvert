@@ -58,9 +58,9 @@ public class MediaConverter extends Executor {
             }
 
         };
-        statusProperty().addListener(progressListener);
+        status.addListener(progressListener);
         ExecuteResult convertResult = execute(convertInfo, false);
-        statusProperty().removeListener(progressListener);
+        status.removeListener(progressListener);
         updateProgressOnUIiThread(Double.NaN);
 
         return new MediaConvertResult(convertInfo.getOutputFile(), convertResult.isSuccess(), convertResult.isCanceled(), convertResult.getCostTime());

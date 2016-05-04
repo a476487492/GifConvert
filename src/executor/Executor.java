@@ -1,5 +1,6 @@
 package executor;
 
+import debug.Debug;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -37,7 +38,10 @@ public class Executor {
 
                 outputStream.write(buffer, 0, readCount);
             }
-            System.out.println("executor has copied to temp directory");
+
+            if (Debug.LOG) {
+                System.out.println("executor has copied to temp directory");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,17 +49,16 @@ public class Executor {
 
     private void ensureExecutorAvailable() {
         if (executorFile.exists()) {
+            if (Debug.LOG) {
+                System.out.print("executor exists");
+            }
             return;
         }
 
         copyExecutorToTempDirectory();
     }
 
-    private final StringProperty status = new SimpleStringProperty();
-
-    protected StringProperty statusProperty() {
-        return status;
-    }
+    protected final StringProperty status = new SimpleStringProperty();
 
     protected ExecuteResult execute(Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
@@ -80,6 +83,10 @@ public class Executor {
                 String message = reader.readLine();
                 if (message == null) {
                     break;
+                }
+
+                if (Debug.LOG) {
+                    System.out.println(message);
                 }
 
                 status.set(message);
@@ -107,8 +114,11 @@ public class Executor {
         executor.destroy();
     }
 
+    /**
+     * Another way to destroy the process, run on a new thread
+     */
     public void forceCancel() {
-        if (this.executor == null) {
+        if (executor == null) {
             return;
         }
 
@@ -123,10 +133,22 @@ public class Executor {
                 command.add(executorName);
                 command.add("/T");
                 ProcessBuilder processBuilder = new ProcessBuilder(command);
+                processBuilder.redirectErrorStream(true);
 
                 try {
-                    Process e = processBuilder.start();
-                    e.waitFor();
+                    Process process = processBuilder.start();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    while (true) {
+                        String message = reader.readLine();
+                        if (message == null) {
+                            break;
+                        }
+
+                        if (Debug.LOG) {
+                            System.out.println(message);
+                        }
+                    }
+                    process.waitFor();
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }

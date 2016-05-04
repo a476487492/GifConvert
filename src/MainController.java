@@ -321,6 +321,10 @@ public class MainController implements Initializable {
             return;
         }
 
+        if (inputMediaDurationView.getHighValue() - inputMediaDurationView.getLowValue() < 1) {
+            return;
+        }
+
         Looper.postTask(new ConvertMediaTask(delay));
     }
 

@@ -1,1 +1,1 @@
-jar vcf mytool.jar executor/* ui/* util/*
+jar vcf mytool.jar executor/* ui/* util/* debug/*
