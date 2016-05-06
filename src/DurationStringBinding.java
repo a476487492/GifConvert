@@ -10,7 +10,7 @@ public class DurationStringBinding extends StringFormatter {
         super.bind(durationProperty);
     }
 
-    public static String formatMediaDuration(int duration) {
+    private static String formatMediaDuration(int duration) {
         return String.format("%02d:%02d", duration / 60, duration % 60);
     }
 
