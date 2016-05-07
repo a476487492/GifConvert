@@ -1,6 +1,5 @@
 package util;
 
-import debug.Debug;
 import javafx.application.Platform;
 
 public abstract class AsyncTask<R> extends Task {
