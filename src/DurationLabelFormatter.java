@@ -1,6 +1,6 @@
 import javafx.util.StringConverter;
 
-public class DurationStringConverter extends StringConverter<Number> {
+public class DurationLabelFormatter extends StringConverter<Number> {
 
     @Override
     public String toString(Number object) {

@@ -96,7 +96,7 @@ public class MainController implements Initializable {
         mediaInfoView.textProperty().bind(mediaConverter.mediaInfoPropertyProperty().asString());
         inputMediaStartTimeView.textProperty().bind(new DurationStringBinding(inputMediaDurationView.lowValueProperty()));
         inputMediaEndTimeView.textProperty().bind(new DurationStringBinding(inputMediaDurationView.highValueProperty()));
-        inputMediaDurationView.setLabelFormatter(new DurationStringConverter());
+        inputMediaDurationView.setLabelFormatter(new DurationLabelFormatter());
 
         {
             final ChangeListener<Number> convertParameterChangeListener = new ChangeListener<Number>() {
