@@ -1,5 +1,6 @@
 package executor;
 
+import com.sun.istack.internal.NotNull;
 import debug.Debug;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -20,7 +21,7 @@ public class Executor {
 
     private boolean isCanceled;
 
-    public Executor(Class loaderClass, String executorName) {
+    public Executor(@NotNull Class loaderClass, @NotNull String executorName) {
         this.loaderClass = loaderClass;
         this.executorName = executorName;
         executorFile = new File(System.getProperty("java.io.tmpdir"), executorName);
@@ -60,7 +61,8 @@ public class Executor {
 
     protected final StringProperty status = new SimpleStringProperty();
 
-    protected ExecuteResult execute(Parameters parameters, boolean needMessages) {
+    @NotNull
+    protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
 
         if (executor != null) {

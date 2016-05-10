@@ -6,15 +6,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Logo {
+class Logo {
 
     private final String logo;
 
-    public Logo(String logo) {
+    Logo(String logo) {
         this.logo = logo;
     }
 
-    public File create() {
+    File create() {
         File logoFile = new File(System.getProperty("java.io.tmpdir"), "ffmpeg-logo.png");
         Font font = new Font("微软雅黑", Font.PLAIN, 15);
         FontMetrics fontMetrics = new Canvas().getFontMetrics(font);

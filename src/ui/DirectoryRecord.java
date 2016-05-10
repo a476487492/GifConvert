@@ -11,13 +11,9 @@ class DirectoryRecord {
 
     private static final String LAST_VISIT_DIRECTORY = "last_visit_directory";
 
-    @Nullable
+    @NotNull
     static File get(@NotNull Class saveClass) {
-        String path = Preferences.userNodeForPackage(saveClass).get(LAST_VISIT_DIRECTORY, "");
-        if ("".equals(path)) {
-            return null;
-        }
-
+        String path = Preferences.userNodeForPackage(saveClass).get(LAST_VISIT_DIRECTORY, System.getProperty("java.io.tmpdir"));
         return new File(path);
     }
 

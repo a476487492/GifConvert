@@ -20,7 +20,7 @@ public class MediaConverter extends Executor {
 
     private DoubleProperty progress = new SimpleDoubleProperty(Double.NaN);
 
-    private ObjectProperty<MediaInfo> mediaInfoProperty = new SimpleObjectProperty<>(MediaInfo.INVALID);
+    private ObjectProperty<MediaInfo> mediaInfoProperty = new SimpleObjectProperty<>();
 
     public MediaConverter() {
         super(MediaConverter.class, CONVERTER_NAME);

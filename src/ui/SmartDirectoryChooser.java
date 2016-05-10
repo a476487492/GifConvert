@@ -12,19 +12,22 @@ public class SmartDirectoryChooser {
     private final DirectoryChooser directoryChooser = new DirectoryChooser();
 
     public File show(final Window ownerWindow) {
-        directoryChooser.setInitialDirectory(DirectoryRecord.get(getClass()));
+        directoryChooser.setInitialDirectory(DirectoryRecord.get(saveClass));
         File directory = directoryChooser.showDialog(ownerWindow);
 
         if (directory != null) {
-            DirectoryRecord.set(getClass(), directory);
+            DirectoryRecord.set(saveClass, directory);
             lastDirectory.set(directory);
         }
 
         return directory;
     }
 
-    public SmartDirectoryChooser() {
-        lastDirectory.set(DirectoryRecord.get(getClass()));
+    private final Class saveClass;
+
+    public SmartDirectoryChooser(Class saveClass) {
+        this.saveClass = saveClass;
+        lastDirectory.set(DirectoryRecord.get(saveClass));
     }
 
     public ObjectProperty<File> lastDirectoryProperty() {

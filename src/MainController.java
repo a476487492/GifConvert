@@ -1,3 +1,6 @@
+import binding.DurationLabelFormatter;
+import binding.DurationStringFormatter;
+import binding.NullableObjectStringFormatter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -93,9 +96,9 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         statusBar.progressProperty().bind(mediaConverter.progressProperty());
-        mediaInfoView.textProperty().bind(mediaConverter.mediaInfoPropertyProperty().asString());
-        inputMediaStartTimeView.textProperty().bind(new DurationStringBinding(inputMediaDurationView.lowValueProperty()));
-        inputMediaEndTimeView.textProperty().bind(new DurationStringBinding(inputMediaDurationView.highValueProperty()));
+        mediaInfoView.textProperty().bind(new NullableObjectStringFormatter<>(mediaConverter.mediaInfoPropertyProperty()));
+        inputMediaStartTimeView.textProperty().bind(new DurationStringFormatter(inputMediaDurationView.lowValueProperty()));
+        inputMediaEndTimeView.textProperty().bind(new DurationStringFormatter(inputMediaDurationView.highValueProperty()));
         inputMediaDurationView.setLabelFormatter(new DurationLabelFormatter());
 
         {
@@ -191,7 +194,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void onChooseVideo(ActionEvent event) {
-        SmartFileChooser fileChooser = new SmartFileChooser();
+        SmartFileChooser fileChooser = new SmartFileChooser(getClass());
         fileChooser.addExtensionFilters(new FileChooser.ExtensionFilter("视频文件", GifConvertParameters.SUPPORT_VIDEO_FORMAT));
         fileChooser.addExtensionFilters(new FileChooser.ExtensionFilter("所有文件", "*.*"));
 
@@ -219,7 +222,7 @@ public class MainController implements Initializable {
     }
 
     private void animateReloadConvertDuration() {
-        if (mediaConverter.mediaInfoPropertyProperty().get() == MediaInfo.INVALID) {
+        if (mediaConverter.mediaInfoPropertyProperty().get() == null) {
             return;
         }
 
@@ -251,7 +254,7 @@ public class MainController implements Initializable {
     }
 
     private void reloadConvertDuration() {
-        if (mediaConverter.mediaInfoPropertyProperty().get() == MediaInfo.INVALID) {
+        if (mediaConverter.mediaInfoPropertyProperty().get() == null) {
             return;
         }
 

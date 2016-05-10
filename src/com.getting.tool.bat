@@ -1,0 +1,1 @@
+jar vcf com.getting.tool.jar executor/* ui/* util/* debug/* binding/*

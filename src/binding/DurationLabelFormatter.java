@@ -1,3 +1,5 @@
+package binding;
+
 import javafx.util.StringConverter;
 
 public class DurationLabelFormatter extends StringConverter<Number> {
