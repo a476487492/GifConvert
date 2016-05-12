@@ -1,5 +1,7 @@
-import binding.DurationLabelFormatter;
-import binding.DurationStringFormatter;
+package com.getting.gifconvert;
+
+import binding.MediaDurationLabelFormatter;
+import binding.MediaDurationStringFormatter;
 import binding.NullableObjectStringFormatter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -95,11 +97,13 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        showLoadingImage();
+
         statusBar.progressProperty().bind(mediaConverter.progressProperty());
         mediaInfoView.textProperty().bind(new NullableObjectStringFormatter<>(mediaConverter.mediaInfoPropertyProperty()));
-        inputMediaStartTimeView.textProperty().bind(new DurationStringFormatter(inputMediaDurationView.lowValueProperty()));
-        inputMediaEndTimeView.textProperty().bind(new DurationStringFormatter(inputMediaDurationView.highValueProperty()));
-        inputMediaDurationView.setLabelFormatter(new DurationLabelFormatter());
+        inputMediaStartTimeView.textProperty().bind(new MediaDurationStringFormatter(inputMediaDurationView.lowValueProperty()));
+        inputMediaEndTimeView.textProperty().bind(new MediaDurationStringFormatter(inputMediaDurationView.highValueProperty()));
+        inputMediaDurationView.setLabelFormatter(new MediaDurationLabelFormatter());
 
         {
             final ChangeListener<Number> convertParameterChangeListener = new ChangeListener<Number>() {

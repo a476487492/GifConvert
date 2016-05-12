@@ -12,7 +12,7 @@
 <?import javafx.scene.image.Image?>
 <NotificationPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0"
                   xmlns="http://javafx.com/javafx/8"
-                  fx:controller="MainController" fx:id="notificationPane" showFromTop="false">
+                  fx:controller="com.getting.gifconvert.MainController" fx:id="notificationPane" showFromTop="false">
     <content>
 
         <BorderPane>
@@ -51,9 +51,6 @@
                     <center>
                         <ImageView fx:id="outputPreviewView" fitHeight="450.0" fitWidth="700.0" pickOnBounds="true"
                                    preserveRatio="true" BorderPane.alignment="CENTER">
-                            <image>
-                                <Image url="@loading.gif"/>
-                            </image>
                         </ImageView>
                     </center>
 
