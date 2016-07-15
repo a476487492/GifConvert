@@ -1,4 +1,4 @@
-package binding;
+package com.getting.util.binding;
 
 import com.sun.javafx.binding.StringFormatter;
 import javafx.beans.property.ObjectProperty;

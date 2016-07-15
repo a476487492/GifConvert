@@ -36,7 +36,7 @@
                         </Menu>
                         <Menu text="编辑">
                             <items>
-                                <CheckMenuItem text="反序输出" fx:id="reverseOutputView">
+                                <CheckMenuItem text="反序输出" fx:id="reverseGifView">
                                 </CheckMenuItem>
                                 <CheckMenuItem text="添加时间水印" fx:id="addLogoView">
                                 </CheckMenuItem>
@@ -49,7 +49,7 @@
             <center>
                 <BorderPane BorderPane.alignment="CENTER">
                     <center>
-                        <ImageView fx:id="outputPreviewView" fitHeight="450.0" fitWidth="700.0" pickOnBounds="true"
+                        <ImageView fx:id="gifPreviewView" fitHeight="450.0" fitWidth="700.0" pickOnBounds="true"
                                    preserveRatio="true" BorderPane.alignment="CENTER">
                         </ImageView>
                     </center>
@@ -57,7 +57,7 @@
                     <right>
                         <VBox>
                             <Label text="帧率："/>
-                            <Slider showTickMarks="true" fx:id="outputFrameRateView"
+                            <Slider showTickMarks="true" fx:id="gifFrameRateView"
                                     showTickLabels="true" min="1" max="25" minorTickCount="2" value="7"
                                     majorTickUnit="5"/>
 
@@ -65,7 +65,7 @@
 
                             <Label text="缩放："/>
                             <Slider showTickMarks="true"
-                                    fx:id="outputScaleView" value="1"
+                                    fx:id="gifScaleView" value="1"
                                     showTickLabels="true" min="0.1" max="1" minorTickCount="3"
                                     majorTickUnit="0.3"/>
 
@@ -76,11 +76,11 @@
                     </right>
 
                     <bottom>
-                        <BorderPane BorderPane.alignment="CENTER" fx:id="inputMediaDurationPane" visible="false">
+                        <BorderPane BorderPane.alignment="CENTER" fx:id="inputVideoDurationPane" visible="false">
                             <center>
                                 <BorderPane BorderPane.alignment="CENTER">
                                     <center>
-                                        <RangeSlider fx:id="inputMediaDurationView" showTickMarks="true"
+                                        <RangeSlider fx:id="inputVideoDurationView" showTickMarks="true"
                                                      minorTickCount="5"
                                                      showTickLabels="true"
                                                      BorderPane.alignment="CENTER">
@@ -92,17 +92,17 @@
                                     </center>
 
                                     <left>
-                                        <Label fx:id="inputMediaStartTimeView"/>
+                                        <Label fx:id="inputVideoStartTimeView"/>
                                     </left>
 
                                     <right>
-                                        <Label fx:id="inputMediaEndTimeView"/>
+                                        <Label fx:id="inputVideoEndTimeView"/>
                                     </right>
                                 </BorderPane>
                             </center>
 
                             <right>
-                                <ToggleSwitch fx:id="detailView" text="微调">
+                                <ToggleSwitch fx:id="videoDurationDetailView" text="微调">
                                     <BorderPane.margin>
                                         <Insets left="30.0" right="30.0"/>
                                     </BorderPane.margin>
@@ -120,7 +120,7 @@
             <bottom>
                 <StatusBar BorderPane.alignment="CENTER" text="" fx:id="statusBar">
                     <leftItems>
-                        <Label fx:id="mediaInfoView"/>
+                        <Label fx:id="videoInfoView"/>
                     </leftItems>
                 </StatusBar>
             </bottom>

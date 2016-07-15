@@ -14,7 +14,8 @@ public abstract class Task implements Comparable<Task> {
 
     public abstract void run();
 
-    public abstract void cancel();
+    public void cancel() {
+    }
 
     public long getTimeRunAt() {
         return timeRunAt;
