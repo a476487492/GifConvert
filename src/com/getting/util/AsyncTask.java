@@ -4,11 +4,13 @@ import javafx.application.Platform;
 
 public abstract class AsyncTask<R> extends Task {
 
-    public abstract void preTaskOnUi();
+    public void preTaskOnUi() {
+    }
 
     public abstract R runTask();
 
-    public abstract void postTaskOnUi(R result);
+    public void postTaskOnUi(R result) {
+    }
 
     @Override
     public final void run() {

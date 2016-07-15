@@ -322,10 +322,6 @@ public class MainController implements Initializable {
         }
 
         @Override
-        public void postTaskOnUi(Void result) {
-        }
-
-        @Override
         public void cancel() {
         }
 
@@ -338,19 +334,9 @@ public class MainController implements Initializable {
         }
 
         @Override
-        public void preTaskOnUi() {
-
-        }
-
-        @Override
         public Void runTask() {
             gifConverter.updateVideo(inputMedia.get());
             return null;
-        }
-
-        @Override
-        public void postTaskOnUi(Void result) {
-
         }
 
         @Override
