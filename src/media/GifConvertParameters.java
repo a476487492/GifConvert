@@ -1,6 +1,6 @@
 package media;
 
-import executor.Parameters;
+import com.getting.util.executor.Parameters;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GifConvertParameters implements Parameters {
 
-    public static final List<String> SUPPORT_VIDEO_FORMAT = Arrays.asList("*.mp4", "*.avi", "*.mkv", "*.mov", "*.flv");
+    public static final List<String> SUPPORT_VIDEO_FORMATS = Arrays.asList("*.mp4", "*.avi", "*.mkv", "*.mov", "*.flv");
 
     private final boolean reverse;
 

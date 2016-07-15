@@ -1,7 +1,6 @@
-package executor;
+package com.getting.util.executor;
 
 import com.sun.istack.internal.NotNull;
-import debug.Debug;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,6 +10,7 @@ import java.util.List;
 
 public class Executor {
 
+    public static boolean LOG = true;
     private final Class loaderClass;
 
     private final String executorName;
@@ -40,8 +40,8 @@ public class Executor {
                 outputStream.write(buffer, 0, readCount);
             }
 
-            if (Debug.LOG) {
-                System.out.println("executor has copied to temp directory");
+            if (LOG) {
+                System.out.println("com.getting.util.executor has copied to temp directory");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,8 +50,8 @@ public class Executor {
 
     private void ensureExecutorAvailable() {
         if (executorFile.exists()) {
-            if (Debug.LOG) {
-                System.out.println("executor exists");
+            if (LOG) {
+                System.out.println("com.getting.util.executor exists");
             }
             return;
         }
@@ -59,7 +59,7 @@ public class Executor {
         copyExecutorToTempDirectory();
     }
 
-    protected final StringProperty status = new SimpleStringProperty();
+    protected final StringProperty executorOutputMessage = new SimpleStringProperty();
 
     @NotNull
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
@@ -87,11 +87,11 @@ public class Executor {
                     break;
                 }
 
-                if (Debug.LOG) {
+                if (LOG) {
                     System.out.println(message);
                 }
 
-                status.set(message);
+                executorOutputMessage.set(message);
                 if (needMessages) {
                     messages.add(message);
                 }
@@ -146,7 +146,7 @@ public class Executor {
                             break;
                         }
 
-                        if (Debug.LOG) {
+                        if (LOG) {
                             System.out.println(message);
                         }
                     }

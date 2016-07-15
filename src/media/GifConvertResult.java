@@ -1,15 +1,15 @@
 package media;
 
-import executor.ExecuteResult;
+import com.getting.util.executor.ExecuteResult;
 
 import java.io.File;
 import java.text.NumberFormat;
 
-public class MediaConvertResult extends ExecuteResult {
+public class GifConvertResult extends ExecuteResult {
 
     private final File outputFile;
 
-    public MediaConvertResult(File outFile, boolean success, boolean canceled, long costTime) {
+    public GifConvertResult(File outFile, boolean success, boolean canceled, long costTime) {
         super(success, canceled, costTime, null);
         this.outputFile = outFile;
     }

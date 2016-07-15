@@ -21,17 +21,16 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import media.GifConvertParameters;
-import media.MediaConvertResult;
-import media.MediaConverter;
-import media.MediaInfo;
+import media.GifConvertResult;
+import media.GifConverter;
+import media.VideoInfo;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
 import org.controlsfx.control.ToggleSwitch;
-import ui.SmartFileChooser;
 import ui.ValueAnimator;
-import util.Looper;
-import util.AsyncTask;
+import com.getting.util.Looper;
+import com.getting.util.AsyncTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +49,7 @@ public class MainController implements Initializable {
 
     private static final Object MSG_RELOAD_MEDIA_INFO = new Object();
 
-    private final MediaConverter mediaConverter = new MediaConverter();
+    private final GifConverter gifConverter = new GifConverter();
 
     private final Image loadingImage = new Image(MainController.class.getResource("loading.gif").toExternalForm(), true);
 
@@ -99,8 +98,8 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         showLoadingImage();
 
-        statusBar.progressProperty().bind(mediaConverter.progressProperty());
-        mediaInfoView.textProperty().bind(new NullableObjectStringFormatter<>(mediaConverter.mediaInfoPropertyProperty()));
+        statusBar.progressProperty().bind(gifConverter.convertProgressProperty());
+        mediaInfoView.textProperty().bind(new NullableObjectStringFormatter<>(gifConverter.videoInfoProperty()));
         inputMediaStartTimeView.textProperty().bind(new MediaDurationStringFormatter(inputMediaDurationView.lowValueProperty()));
         inputMediaEndTimeView.textProperty().bind(new MediaDurationStringFormatter(inputMediaDurationView.highValueProperty()));
         inputMediaDurationView.setLabelFormatter(new MediaDurationLabelFormatter());
@@ -157,10 +156,10 @@ public class MainController implements Initializable {
 
         });
 
-        mediaConverter.mediaInfoPropertyProperty().addListener(new ChangeListener<MediaInfo>() {
+        gifConverter.videoInfoProperty().addListener(new ChangeListener<VideoInfo>() {
 
             @Override
-            public void changed(ObservableValue<? extends MediaInfo> observable, MediaInfo oldValue, MediaInfo newValue) {
+            public void changed(ObservableValue<? extends VideoInfo> observable, VideoInfo oldValue, VideoInfo newValue) {
                 reloadConvertDuration();
             }
 
@@ -198,9 +197,9 @@ public class MainController implements Initializable {
 
     @FXML
     private void onChooseVideo(ActionEvent event) {
-        SmartFileChooser fileChooser = new SmartFileChooser(getClass());
-        fileChooser.addExtensionFilters(new FileChooser.ExtensionFilter("视频文件", GifConvertParameters.SUPPORT_VIDEO_FORMAT));
-        fileChooser.addExtensionFilters(new FileChooser.ExtensionFilter("所有文件", "*.*"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("视频文件", GifConvertParameters.SUPPORT_VIDEO_FORMATS));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("所有文件", "*.*"));
 
         File chooseFile = fileChooser.showOpenDialog(outputPreviewView.getScene().getWindow());
         if (chooseFile != null) {
@@ -226,11 +225,11 @@ public class MainController implements Initializable {
     }
 
     private void animateReloadConvertDuration() {
-        if (mediaConverter.mediaInfoPropertyProperty().get() == null) {
+        if (gifConverter.videoInfoProperty().get() == null) {
             return;
         }
 
-        final double mediaDuration = mediaConverter.mediaInfoPropertyProperty().get().getDuration();
+        final double mediaDuration = gifConverter.videoInfoProperty().get().getDuration();
 
         final double minFrom;
         final double minTo;
@@ -258,11 +257,11 @@ public class MainController implements Initializable {
     }
 
     private void reloadConvertDuration() {
-        if (mediaConverter.mediaInfoPropertyProperty().get() == null) {
+        if (gifConverter.videoInfoProperty().get() == null) {
             return;
         }
 
-        final double mediaDuration = mediaConverter.mediaInfoPropertyProperty().get().getDuration();
+        final double mediaDuration = gifConverter.videoInfoProperty().get().getDuration();
 
         if (detailView.isSelected()) {
             inputMediaDurationView.setMin(Math.max(0, inputMediaDurationView.getLowValue() - 10));
@@ -347,7 +346,7 @@ public class MainController implements Initializable {
         outputPreviewView.setImage(loadingImage);
     }
 
-    private void showLoadingFinish(MediaConvertResult result) {
+    private void showLoadingFinish(GifConvertResult result) {
         if (result == null) {
             return;
         }
@@ -411,7 +410,7 @@ public class MainController implements Initializable {
 
         @Override
         public Void runTask() {
-            mediaConverter.updateMediaInfo(inputMedia.get());
+            gifConverter.updateVideo(inputMedia.get());
             return null;
         }
 
@@ -422,12 +421,12 @@ public class MainController implements Initializable {
 
         @Override
         public void cancel() {
-            mediaConverter.cancel();
+            gifConverter.cancel();
         }
 
     }
 
-    private class ConvertMediaTask extends AsyncTask<MediaConvertResult> {
+    private class ConvertMediaTask extends AsyncTask<GifConvertResult> {
 
         public ConvertMediaTask(long delay) {
             super(MSG_CONVERT_MEDIA, delay);
@@ -439,9 +438,9 @@ public class MainController implements Initializable {
         }
 
         @Override
-        public MediaConvertResult runTask() {
+        public GifConvertResult runTask() {
             String logo = addLogoView.isSelected() ? new SimpleDateFormat().format(new Date()) : " ";
-            return mediaConverter.convert(
+            return gifConverter.convert(
                     new GifConvertParameters(inputMedia.get(),
                             outputFrameRateView.getValue(),
                             outputScaleView.getValue(),
@@ -452,13 +451,13 @@ public class MainController implements Initializable {
         }
 
         @Override
-        public void postTaskOnUi(MediaConvertResult result) {
+        public void postTaskOnUi(GifConvertResult result) {
             showLoadingFinish(result);
         }
 
         @Override
         public void cancel() {
-            mediaConverter.cancel();
+            gifConverter.cancel();
         }
 
     }

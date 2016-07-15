@@ -1,12 +1,11 @@
 package media;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MediaInfo {
+public class VideoInfo {
 
     private static final Pattern DURATION_PATTERN = Pattern.compile("(?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})\\.(\\d+)", Pattern.CASE_INSENSITIVE);
 
@@ -25,7 +24,7 @@ public class MediaInfo {
     /**
      * @param messages Output of "ffmpeg -i file"
      */
-    public MediaInfo(List<String> messages) {
+    public VideoInfo(List<String> messages) {
         videoSize = parseVideoSize(messages);
         frameRate = parseFrameRate(messages);
         durationDescription = parseDuration(messages);

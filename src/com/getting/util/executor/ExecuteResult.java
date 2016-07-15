@@ -1,4 +1,4 @@
-package executor;
+package com.getting.util.executor;
 
 import java.util.List;
 

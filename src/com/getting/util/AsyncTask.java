@@ -1,4 +1,4 @@
-package util;
+package com.getting.util;
 
 import javafx.application.Platform;
 
