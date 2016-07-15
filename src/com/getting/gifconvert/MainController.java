@@ -28,7 +28,6 @@ import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
 import org.controlsfx.control.ToggleSwitch;
-import ui.ValueAnimator;
 import com.getting.util.Looper;
 import com.getting.util.AsyncTask;
 
@@ -169,7 +168,7 @@ public class MainController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                animateReloadConvertDuration();
+                reloadConvertDuration();
             }
 
         });
@@ -224,38 +223,6 @@ public class MainController implements Initializable {
         }
     }
 
-    private void animateReloadConvertDuration() {
-        if (gifConverter.videoInfoProperty().get() == null) {
-            return;
-        }
-
-        final double mediaDuration = gifConverter.videoInfoProperty().get().getDuration();
-
-        final double minFrom;
-        final double minTo;
-        final double maxFrom;
-        final double maxTo;
-        if (detailView.isSelected()) {
-            minFrom = 0;
-            minTo = Math.max(0, inputMediaDurationView.getLowValue() - 10);
-            maxFrom = mediaDuration;
-            maxTo = Math.min(mediaDuration, inputMediaDurationView.getHighValue() + 10);
-        } else {
-            minFrom = inputMediaDurationView.getMin();
-            minTo = 0;
-            maxFrom = inputMediaDurationView.getMax();
-            maxTo = mediaDuration;
-        }
-
-        if (mediaDurationAnimator != null) {
-            mediaDurationAnimator.cancel();
-        }
-        mediaDurationAnimator = new MediaDurationAnimator(minFrom, minTo, maxFrom, maxTo);
-        mediaDurationAnimator.start();
-
-        inputMediaDurationPane.setVisible(true);
-    }
-
     private void reloadConvertDuration() {
         if (gifConverter.videoInfoProperty().get() == null) {
             return;
@@ -273,39 +240,6 @@ public class MainController implements Initializable {
         inputMediaDurationView.setMajorTickUnit((inputMediaDurationView.getMax() - inputMediaDurationView.getMin()) / 10);
 
         inputMediaDurationPane.setVisible(true);
-    }
-
-    private ValueAnimator mediaDurationAnimator;
-
-    private class MediaDurationAnimator extends ValueAnimator {
-
-        private final double minFrom;
-
-        private final double minTo;
-
-        private final double maxFrom;
-
-        private final double maxTo;
-
-        public MediaDurationAnimator(double minFrom, double minTo, double maxFrom, double maxTo) {
-            super(500);
-            this.minFrom = minFrom;
-            this.minTo = minTo;
-            this.maxFrom = maxFrom;
-            this.maxTo = maxTo;
-        }
-
-        @Override
-        public void onAnimate(double progress) {
-            inputMediaDurationView.setMin(calculate(minFrom, minTo, progress));
-            inputMediaDurationView.setMax(calculate(maxFrom, maxTo, progress));
-            inputMediaDurationView.setMajorTickUnit((inputMediaDurationView.getMax() - inputMediaDurationView.getMin()) / 10);
-        }
-
-        private double calculate(double from, double to, double progress) {
-            return from + (to - from) * progress;
-        }
-
     }
 
     private void reloadMediaConvert(long delay) {

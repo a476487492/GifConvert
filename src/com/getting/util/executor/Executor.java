@@ -11,6 +11,7 @@ import java.util.List;
 public class Executor {
 
     public static boolean LOG = true;
+
     private final Class loaderClass;
 
     private final String executorName;
@@ -65,9 +66,8 @@ public class Executor {
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
 
-        if (executor != null) {
-            throw new RuntimeException("cannot execute two process together");
-        }
+        // cannot execute two process together
+        assert executor != null;
 
         final long startTime = System.currentTimeMillis();
         try {
@@ -119,44 +119,44 @@ public class Executor {
     /**
      * Another way to destroy the process, run on a new thread
      */
-    public void forceCancel() {
-        if (executor == null) {
-            return;
-        }
-
-        isCanceled = true;
-        new Thread() {
-
-            public void run() {
-                ArrayList<String> command = new ArrayList<>();
-                command.add("taskkill");
-                command.add("/F");
-                command.add("/IM");
-                command.add(executorName);
-                command.add("/T");
-                ProcessBuilder processBuilder = new ProcessBuilder(command);
-                processBuilder.redirectErrorStream(true);
-
-                try {
-                    Process process = processBuilder.start();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    while (true) {
-                        String message = reader.readLine();
-                        if (message == null) {
-                            break;
-                        }
-
-                        if (LOG) {
-                            System.out.println(message);
-                        }
-                    }
-                    process.waitFor();
-                } catch (InterruptedException | IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }.start();
-    }
+//    public void forceCancel() {
+//        if (executor == null) {
+//            return;
+//        }
+//
+//        isCanceled = true;
+//        new Thread() {
+//
+//            public void run() {
+//                ArrayList<String> command = new ArrayList<>();
+//                command.add("taskkill");
+//                command.add("/F");
+//                command.add("/IM");
+//                command.add(executorName);
+//                command.add("/T");
+//                ProcessBuilder processBuilder = new ProcessBuilder(command);
+//                processBuilder.redirectErrorStream(true);
+//
+//                try {
+//                    Process process = processBuilder.start();
+//                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//                    while (true) {
+//                        String message = reader.readLine();
+//                        if (message == null) {
+//                            break;
+//                        }
+//
+//                        if (LOG) {
+//                            System.out.println(message);
+//                        }
+//                    }
+//                    process.waitFor();
+//                } catch (InterruptedException | IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        }.start();
+//    }
 
 }
