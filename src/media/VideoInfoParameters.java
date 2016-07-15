@@ -8,17 +8,17 @@ import java.util.List;
 
 public class VideoInfoParameters implements Parameters {
 
-    public VideoInfoParameters(File media) {
-        this.media = media;
+    public VideoInfoParameters(File video) {
+        this.video = video;
     }
 
-    private final File media;
+    private final File video;
 
     @Override
     public List<String> build() {
         List<String> command = new ArrayList<>();
         command.add("-i");
-        command.add(media.getAbsolutePath());
+        command.add(video.getAbsolutePath());
         return command;
     }
 
