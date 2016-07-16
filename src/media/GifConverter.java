@@ -26,7 +26,7 @@ public class GifConverter extends Executor {
         super(GifConverter.class, CONVERTER_NAME);
     }
 
-    public void updateVideo(File file) {
+    public void updateVideoInfo(File file) {
         updateProgressOnUIiThread(Double.NEGATIVE_INFINITY);
         ExecuteResult result = execute(new VideoInfoParameters(file), true);
         updateProgressOnUIiThread(Double.NaN);
@@ -37,7 +37,7 @@ public class GifConverter extends Executor {
         updateMediaInfoOnUiThread(videoInfo);
     }
 
-    public GifConvertResult convert(@NotNull GifConvertParameters parameters) {
+    public ExecuteResult convert(@NotNull GifConvertParameters parameters) {
         updateProgressOnUIiThread(Double.NEGATIVE_INFINITY);
 
         ChangeListener<String> progressListener = new ChangeListener<String>() {
@@ -63,7 +63,7 @@ public class GifConverter extends Executor {
         executorOutputMessage.removeListener(progressListener);
         updateProgressOnUIiThread(Double.NaN);
 
-        return new GifConvertResult(parameters.getOutputFile(), convertResult.isSuccess(), convertResult.isCanceled(), convertResult.getCostTime());
+        return convertResult;
     }
 
     public DoubleProperty convertProgressProperty() {

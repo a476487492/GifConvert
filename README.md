@@ -1,4 +1,4 @@
-# GifConvert（视频转gif）
+# Gif转换器
 
 将视频文件转换成gif图片
 

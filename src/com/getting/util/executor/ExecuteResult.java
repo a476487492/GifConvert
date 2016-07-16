@@ -1,5 +1,6 @@
 package com.getting.util.executor;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 public class ExecuteResult {
@@ -33,6 +34,10 @@ public class ExecuteResult {
 
     public long getCostTime() {
         return costTime;
+    }
+
+    public String getCostTimeDescription() {
+        return NumberFormat.getNumberInstance().format(costTime / 1000.0) + " 秒";
     }
 
 }

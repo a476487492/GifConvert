@@ -2,7 +2,7 @@ package binding;
 
 import javafx.util.StringConverter;
 
-public class MediaDurationLabelFormatter extends StringConverter<Number> {
+public class VideoDurationLabelFormatter extends StringConverter<Number> {
 
     @Override
     public String toString(Number object) {

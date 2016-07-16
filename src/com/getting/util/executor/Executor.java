@@ -1,6 +1,7 @@
 package com.getting.util.executor;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -62,7 +63,7 @@ public class Executor {
 
     protected final StringProperty executorOutputMessage = new SimpleStringProperty();
 
-    @NotNull
+    @Nullable
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
 

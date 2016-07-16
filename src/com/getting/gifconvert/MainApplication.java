@@ -21,7 +21,7 @@ public class MainApplication extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setResizable(false);
         primaryStage.setTitle("视频转Gif");
-        primaryStage.getIcons().setAll(new Image(MainApplication.class.getResource("app_icon.jpg").toExternalForm()));
+        primaryStage.getIcons().setAll(new Image(MainApplication.class.getResource("app_icon.png").toExternalForm()));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

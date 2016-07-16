@@ -1,8 +1,10 @@
 package com.getting.gifconvert;
 
-import binding.MediaDurationLabelFormatter;
-import binding.MediaDurationStringFormatter;
+import binding.VideoDurationLabelFormatter;
+import binding.VideoDurationStringFormatter;
+import com.getting.util.FileUtil;
 import com.getting.util.binding.NullableObjectStringFormatter;
+import com.getting.util.executor.ExecuteResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -21,7 +23,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import media.GifConvertParameters;
-import media.GifConvertResult;
 import media.GifConverter;
 import media.VideoInfo;
 import org.controlsfx.control.NotificationPane;
@@ -44,9 +45,9 @@ public class MainController implements Initializable {
 
     private static final Object MSG_HIDE_NOTIFICATION = new Object();
 
-    private static final Object MSG_CONVERT_MEDIA = new Object();
+    private static final Object MSG_CONVERT_VIDEO = new Object();
 
-    private static final Object MSG_RELOAD_MEDIA_INFO = new Object();
+    private static final Object MSG_RELOAD_VIDEO_INFO = new Object();
 
     private final GifConverter gifConverter = new GifConverter();
 
@@ -99,16 +100,16 @@ public class MainController implements Initializable {
 
         statusBar.progressProperty().bind(gifConverter.convertProgressProperty());
         videoInfoView.textProperty().bind(new NullableObjectStringFormatter<>(gifConverter.videoInfoProperty()));
-        inputVideoStartTimeView.textProperty().bind(new MediaDurationStringFormatter(inputVideoDurationView.lowValueProperty()));
-        inputVideoEndTimeView.textProperty().bind(new MediaDurationStringFormatter(inputVideoDurationView.highValueProperty()));
-        inputVideoDurationView.setLabelFormatter(new MediaDurationLabelFormatter());
+        inputVideoStartTimeView.textProperty().bind(new VideoDurationStringFormatter(inputVideoDurationView.lowValueProperty()));
+        inputVideoEndTimeView.textProperty().bind(new VideoDurationStringFormatter(inputVideoDurationView.highValueProperty()));
+        inputVideoDurationView.setLabelFormatter(new VideoDurationLabelFormatter());
 
         {
             final ChangeListener<Number> convertParameterChangeListener = new ChangeListener<Number>() {
 
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    reloadInputDuration();
+                    reloadInputVideoDuration();
                     reloadGifConvert(1000);
                 }
 
@@ -159,7 +160,7 @@ public class MainController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends VideoInfo> observable, VideoInfo oldValue, VideoInfo newValue) {
-                reloadInputDuration();
+                reloadInputVideoDuration();
             }
 
         });
@@ -168,7 +169,7 @@ public class MainController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                reloadInputDuration();
+                reloadInputVideoDuration();
             }
 
         });
@@ -223,7 +224,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void reloadInputDuration() {
+    private void reloadInputVideoDuration() {
         if (gifConverter.videoInfoProperty().get() == null) {
             return;
         }
@@ -243,7 +244,7 @@ public class MainController implements Initializable {
     }
 
     private void reloadGifConvert(long delay) {
-        Looper.removeTask(MSG_CONVERT_MEDIA);
+        Looper.removeTask(MSG_CONVERT_VIDEO);
 
         notificationPane.hide();
 
@@ -269,33 +270,16 @@ public class MainController implements Initializable {
     }
 
     private void reloadVideoInfo() {
-        Looper.removeTask(MSG_RELOAD_MEDIA_INFO);
+        Looper.removeTask(MSG_RELOAD_VIDEO_INFO);
         if (inputVideo.get() == null) {
             return;
         }
+
         Looper.postTask(new ReloadVideoInfoTask());
     }
 
     private void showLoadingImage() {
         gifPreviewView.setImage(loadingImage);
-    }
-
-    private void showLoadingFinish(GifConvertResult result) {
-        if (result == null) {
-            return;
-        }
-
-        try {
-            gifPreviewView.setImage(new Image(result.getOutputFile().toURI().toURL().toExternalForm(), true));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        if (result.isCanceled()) {
-            return;
-        }
-
-        showNotificationForAWhile(result.getResult());
     }
 
     private void showNotificationForAWhile(String message) {
@@ -326,12 +310,12 @@ public class MainController implements Initializable {
     private class ReloadVideoInfoTask extends AsyncTask<Void> {
 
         public ReloadVideoInfoTask() {
-            super(MSG_RELOAD_MEDIA_INFO, 0);
+            super(MSG_RELOAD_VIDEO_INFO, 0);
         }
 
         @Override
         public Void runTask() {
-            gifConverter.updateVideo(inputVideo.get());
+            gifConverter.updateVideoInfo(inputVideo.get());
             return null;
         }
 
@@ -342,11 +326,21 @@ public class MainController implements Initializable {
 
     }
 
-    private class GifConvertTask extends AsyncTask<GifConvertResult> {
+    private class GifConvertTask extends AsyncTask<ExecuteResult> {
 
         public GifConvertTask(long delay) {
-            super(MSG_CONVERT_MEDIA, delay);
+            super(MSG_CONVERT_VIDEO, delay);
+            String logo = addLogoView.isSelected() ? new SimpleDateFormat().format(new Date()) : " ";
+            parameters = new GifConvertParameters(inputVideo.get(),
+                    gifFrameRateView.getValue(),
+                    gifScaleView.getValue(),
+                    inputVideoDurationView.getLowValue(),
+                    inputVideoDurationView.getHighValue() - inputVideoDurationView.getLowValue(),
+                    reverseGifView.isSelected(),
+                    logo);
         }
+
+        private final GifConvertParameters parameters;
 
         @Override
         public void preTaskOnUi() {
@@ -354,21 +348,27 @@ public class MainController implements Initializable {
         }
 
         @Override
-        public GifConvertResult runTask() {
-            String logo = addLogoView.isSelected() ? new SimpleDateFormat().format(new Date()) : " ";
-            return gifConverter.convert(
-                    new GifConvertParameters(inputVideo.get(),
-                            gifFrameRateView.getValue(),
-                            gifScaleView.getValue(),
-                            inputVideoDurationView.getLowValue(),
-                            inputVideoDurationView.getHighValue() - inputVideoDurationView.getLowValue(),
-                            reverseGifView.isSelected(),
-                            logo));
+        public ExecuteResult runTask() {
+            return gifConverter.convert(parameters);
         }
 
         @Override
-        public void postTaskOnUi(GifConvertResult result) {
-            showLoadingFinish(result);
+        public void postTaskOnUi(ExecuteResult result) {
+            if (result == null) {
+                return;
+            }
+
+            try {
+                gifPreviewView.setImage(new Image(parameters.getOutputFile().toURI().toURL().toExternalForm(), true));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            if (result.isCanceled()) {
+                return;
+            }
+
+            showNotificationForAWhile(result.isSuccess() ? "转换时间：" + result.getCostTimeDescription() + "，转换后大小：" + FileUtil.getFileSizeDescription(parameters.getOutputFile()) : "转换失败！！是否选择了有效的视频文件？");
         }
 
         @Override

@@ -3,11 +3,11 @@ package binding;
 import com.sun.javafx.binding.StringFormatter;
 import javafx.beans.property.DoubleProperty;
 
-public class MediaDurationStringFormatter extends StringFormatter {
+public class VideoDurationStringFormatter extends StringFormatter {
 
     private DoubleProperty durationProperty;
 
-    public MediaDurationStringFormatter(DoubleProperty durationProperty) {
+    public VideoDurationStringFormatter(DoubleProperty durationProperty) {
         super.bind(durationProperty);
         this.durationProperty = durationProperty;
     }
