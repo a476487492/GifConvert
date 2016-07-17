@@ -15,6 +15,9 @@ public class FfmpegUtil {
 
     private static final Pattern VIDEO_FRAME_RATE_PATTERN = Pattern.compile("(?<frame>[0-9.]+) fps", Pattern.CASE_INSENSITIVE);
 
+    /**
+     * @param messages Output of "ffmpeg -i file"
+     */
     @Nullable
     public static Point parseVideoSize(@NotNull List<String> messages) {
         for (String message : messages) {
@@ -29,7 +32,11 @@ public class FfmpegUtil {
         return null;
     }
 
-    public static double parseFrameRate(@NotNull List<String> messages) {
+    /**
+     * @param messages Output of "ffmpeg -i file"
+     */
+    @Nullable
+    public static Double parseFrameRate(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher frameRateMatcher = VIDEO_FRAME_RATE_PATTERN.matcher(token);
@@ -39,22 +46,29 @@ public class FfmpegUtil {
             }
         }
 
-        return 0;
+        return null;
     }
 
-    public static double parseDuration(@NotNull List<String> messages) {
+    /**
+     * @param messages Output of "ffmpeg -i file"
+     */
+    @Nullable
+    public static Double parseDuration(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher videoDurationMatcher = DURATION_PATTERN.matcher(token);
                 if (videoDurationMatcher.find()) {
-                    return Integer.parseInt(videoDurationMatcher.group("hour")) * 60 * 60 + Integer.parseInt(videoDurationMatcher.group("minute")) * 60 + Integer.parseInt(videoDurationMatcher.group("second"));
+                    return 0.0 + Integer.parseInt(videoDurationMatcher.group("hour")) * 60 * 60 + Integer.parseInt(videoDurationMatcher.group("minute")) * 60 + Integer.parseInt(videoDurationMatcher.group("second"));
                 }
             }
         }
 
-        return 0;
+        return null;
     }
 
+    /**
+     * @param messages Output of "ffmpeg -i file"
+     */
     @Nullable
     public static String parseDurationDescription(@NotNull List<String> messages) {
         for (String message : messages) {
