@@ -29,6 +29,7 @@ public class MainApplication extends Application {
     @Override
     public void stop() throws Exception {
         Looper.removeAllTasks();
+        super.stop();
     }
 
 }
