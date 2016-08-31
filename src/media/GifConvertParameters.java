@@ -15,7 +15,7 @@ public class GifConvertParameters implements Parameters {
 
     private final String logo;
 
-    private final File media;
+    private final File video;
 
     private final double outputFrameRate;
 
@@ -25,8 +25,8 @@ public class GifConvertParameters implements Parameters {
 
     private final double convertDuration;
 
-    public GifConvertParameters(File media, double outputFrameRate, double outputScale, double convertStartTime, double convertDuration, boolean reverse, String logo) {
-        this.media = media;
+    public GifConvertParameters(File video, double outputFrameRate, double outputScale, double convertStartTime, double convertDuration, boolean reverse, String logo) {
+        this.video = video;
         this.outputFrameRate = outputFrameRate;
         this.outputScale = outputScale;
         this.convertStartTime = convertStartTime;
@@ -49,7 +49,7 @@ public class GifConvertParameters implements Parameters {
         command.add("-ss");
         command.add("" + convertStartTime);
         command.add("-i");
-        command.add(media.getAbsolutePath());
+        command.add(video.getAbsolutePath());
         command.add("-i");
         command.add(new Logo(logo).create().getAbsolutePath());
 
@@ -73,8 +73,13 @@ public class GifConvertParameters implements Parameters {
         return command;
     }
 
+    @Override
+    public File getOutputDirectory() {
+        return getOutputFile().getParentFile();
+    }
+
     public File getOutputFile() {
-        return new File(media.getParent(), media.getName() + ".gif");
+        return new File(video.getParent(), video.getName() + ".gif");
     }
 
 }

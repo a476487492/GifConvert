@@ -22,4 +22,9 @@ public class VideoInfoParameters implements Parameters {
         return command;
     }
 
+    @Override
+    public File getOutputDirectory() {
+        return null;
+    }
+
 }

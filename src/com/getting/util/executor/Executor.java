@@ -43,7 +43,7 @@ public class Executor {
             }
 
             if (LOG) {
-                System.out.println("com.getting.util.executor has copied to temp directory");
+                System.out.println(executorName + " has copied to " + executorFile);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,9 +51,9 @@ public class Executor {
     }
 
     private void ensureExecutorAvailable() {
-        if (executorFile.exists()) {
+        if (executorFile.exists() && executorFile.isFile()) {
             if (LOG) {
-                System.out.println("com.getting.util.executor exists");
+                System.out.println(executorFile + " exists");
             }
             return;
         }
@@ -61,11 +61,30 @@ public class Executor {
         copyExecutorToTempDirectory();
     }
 
+    private void ensureOutputDirectoryAvailable(File outputDirectory) {
+        if (outputDirectory == null) {
+            return;
+        }
+
+        if (outputDirectory.exists() && outputDirectory.isDirectory()) {
+            if (LOG) {
+                System.out.println(outputDirectory + " exists");
+            }
+            return;
+        }
+
+        boolean mkdirsSuccess = outputDirectory.mkdirs();
+        if (LOG) {
+            System.out.println(outputDirectory + " mkdirs " + mkdirsSuccess);
+        }
+    }
+
     protected final StringProperty executorOutputMessage = new SimpleStringProperty();
 
     @Nullable
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
+        ensureOutputDirectoryAvailable(parameters.getOutputDirectory());
 
         // cannot execute two process together
         assert executor != null;
