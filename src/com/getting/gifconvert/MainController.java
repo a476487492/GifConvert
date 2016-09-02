@@ -50,6 +50,8 @@ public class MainController implements Initializable {
     private static final Object MSG_RELOAD_VIDEO_INFO = new Object();
 
     private final GifConverter gifConverter = new GifConverter();
+    private final Looper convertLoop = new Looper();
+    private final Looper uiLoop = new Looper();
 
     private final Image loadingImage = new Image(MainController.class.getResource("loading.gif").toExternalForm(), true);
 
@@ -244,7 +246,7 @@ public class MainController implements Initializable {
     }
 
     private void reloadGifConvert(long delay) {
-        Looper.removeTask(MSG_CONVERT_VIDEO);
+        convertLoop.removeTask(MSG_CONVERT_VIDEO);
 
         notificationPane.hide();
 
@@ -266,16 +268,16 @@ public class MainController implements Initializable {
             return;
         }
 
-        Looper.postTask(new GifConvertTask(delay));
+        convertLoop.postTask(new GifConvertTask(delay));
     }
 
     private void reloadVideoInfo() {
-        Looper.removeTask(MSG_RELOAD_VIDEO_INFO);
+        convertLoop.removeTask(MSG_RELOAD_VIDEO_INFO);
         if (inputVideo.get() == null) {
             return;
         }
 
-        Looper.postTask(new ReloadVideoInfoTask());
+        convertLoop.postTask(new ReloadVideoInfoTask());
     }
 
     private void showLoadingImage() {
@@ -285,8 +287,8 @@ public class MainController implements Initializable {
     private void showNotificationForAWhile(String message) {
         notificationPane.show(message);
 
-        Looper.removeTask(MSG_HIDE_NOTIFICATION);
-        Looper.postTask(new HideNotificationTask(3000));
+        uiLoop.removeTask(MSG_HIDE_NOTIFICATION);
+        uiLoop.postTask(new HideNotificationTask(3000));
     }
 
     private class HideNotificationTask extends AsyncTask<Void> {

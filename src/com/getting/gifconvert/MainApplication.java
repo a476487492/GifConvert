@@ -16,7 +16,6 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Looper.prepare();
 
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setResizable(false);
@@ -28,7 +27,6 @@ public class MainApplication extends Application {
 
     @Override
     public void stop() throws Exception {
-        Looper.removeAllTasks();
         super.stop();
     }
 
