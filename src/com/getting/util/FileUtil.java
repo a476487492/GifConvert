@@ -1,6 +1,9 @@
 package com.getting.util;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.File;
+import java.io.IOException;
 
 public class FileUtil {
 
@@ -8,7 +11,7 @@ public class FileUtil {
     private static final int MB = 1024 * KB;
     private static final int GB = 1024 * MB;
 
-    public static String getFileSizeDescription(File file) {
+    public static String getFileSizeDescription(@NotNull File file) {
         if (file.length() < MB) {
             return String.format("%.2f KB", 1.0 * file.length() / KB);
         } else if (file.length() < GB) {
@@ -18,17 +21,17 @@ public class FileUtil {
         }
     }
 
-    public static String getFileNameWithoutExtension(File file) {
+    public static String getFileNameWithoutExtension(@NotNull File file) {
         String name = file.getName();
         return name.substring(0, name.lastIndexOf("."));
     }
 
-    public static String getFileExtension(File file) {
+    public static String getFileExtension(@NotNull File file) {
         String name = file.getName();
         return name.substring(name.lastIndexOf("."), name.length());
     }
 
-    public static File ensureFileNotExist(File file) {
+    public static File ensureFileExist(@NotNull File file) {
         File correctFile = file;
         int suffix = 1;
         while (true) {
@@ -38,6 +41,14 @@ public class FileUtil {
                 correctFile = new File(file.getParentFile(), getFileNameWithoutExtension(file) + "_" + suffix + getFileExtension(file));
                 suffix++;
             }
+        }
+    }
+
+    public static void openFileDirectory(@NotNull File file) {
+        try {
+            Runtime.getRuntime().exec("explorer /select,\"" + file.getAbsolutePath() + "\"");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

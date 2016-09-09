@@ -13,8 +13,6 @@ import java.util.List;
 
 public class Executor {
 
-    private final static boolean OPEN_LOG = true;
-
     private final Class loaderClass;
 
     private final String executorName;
@@ -46,9 +44,7 @@ public class Executor {
                 outputStream.write(buffer, 0, readCount);
             }
 
-            if (OPEN_LOG) {
-                System.out.println(executorName + " has copied to " + executorFile);
-            }
+            System.out.println(executorName + " has copied to " + executorFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,9 +52,7 @@ public class Executor {
 
     private void ensureExecutorAvailable() {
         if (executorFile.exists() && executorFile.isFile()) {
-            if (OPEN_LOG) {
-                System.out.println(executorFile + " exists");
-            }
+            System.out.println(executorFile + " exists");
             return;
         }
 
@@ -71,16 +65,12 @@ public class Executor {
         }
 
         if (outputDirectory.exists() && outputDirectory.isDirectory()) {
-            if (OPEN_LOG) {
-                System.out.println(outputDirectory + " exists");
-            }
+            System.out.println(outputDirectory + " exists");
             return;
         }
 
         boolean mkdirsSuccess = outputDirectory.mkdirs();
-        if (OPEN_LOG) {
-            System.out.println(outputDirectory + " mkdirs " + mkdirsSuccess);
-        }
+        System.out.println(outputDirectory + " mkdirs " + mkdirsSuccess);
     }
 
     protected final StringProperty executorOutputMessage = new SimpleStringProperty();
@@ -111,9 +101,7 @@ public class Executor {
                     break;
                 }
 
-                if (OPEN_LOG) {
-                    System.out.println(message);
-                }
+                System.out.println(message);
 
                 executorOutputMessage.set(message);
                 if (needMessages) {
@@ -174,9 +162,7 @@ public class Executor {
 //                            break;
 //                        }
 //
-//                        if (OPEN_LOG) {
-//                            System.out.println(message);
-//                        }
+//                        System.out.println(message);
 //                    }
 //                    process.waitFor();
 //                } catch (InterruptedException | IOException e) {

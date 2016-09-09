@@ -39,7 +39,7 @@ public class FfmpegUtil {
      * @param messages Output of "ffmpeg -i file"
      */
     @Nullable
-    public static Double parseFrameRate(@NotNull List<String> messages) {
+    public static double parseFrameRate(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher frameRateMatcher = VIDEO_FRAME_RATE_PATTERN.matcher(token);
@@ -49,24 +49,24 @@ public class FfmpegUtil {
             }
         }
 
-        return null;
+        return -1;
     }
 
     /**
      * @param messages Output of "ffmpeg -i file"
      */
     @Nullable
-    public static Double parseDuration(@NotNull List<String> messages) {
+    public static double parseDuration(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher videoDurationMatcher = DURATION_PATTERN.matcher(token);
                 if (videoDurationMatcher.find()) {
-                    return 0.0 + Integer.parseInt(videoDurationMatcher.group("hour")) * 60 * 60 + Integer.parseInt(videoDurationMatcher.group("minute")) * 60 + Integer.parseInt(videoDurationMatcher.group("second"));
+                    return Integer.parseInt(videoDurationMatcher.group("hour")) * 60 * 60 + Integer.parseInt(videoDurationMatcher.group("minute")) * 60 + Integer.parseInt(videoDurationMatcher.group("second"));
                 }
             }
         }
 
-        return null;
+        return -1;
     }
 
     /**
@@ -90,7 +90,7 @@ public class FfmpegUtil {
      * @param messages Output of "ffmpeg -i input ouput"
      */
     @Nullable
-    public static int getConvertDuration(@NotNull String messages) {
+    public static double getConvertDuration(@NotNull String messages) {
         for (String split : messages.split(" ")) {
             Matcher matcher = CONVERT_PROGRESS_PATTERN.matcher(split);
             if (matcher.matches()) {

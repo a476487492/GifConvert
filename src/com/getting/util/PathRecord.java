@@ -1,7 +1,6 @@
 package com.getting.util;
 
 import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -11,18 +10,19 @@ import java.util.prefs.Preferences;
 
 public class PathRecord {
 
-    private static final String LAST_VISIT_DIRECTORY = "last_visit_directory";
+    private final String key;
 
     public void set(@NotNull File directory) {
-        Preferences.userNodeForPackage(referClass).put(LAST_VISIT_DIRECTORY, directory.getAbsolutePath());
+        Preferences.userNodeForPackage(referClass).put(key, directory.getAbsolutePath());
         path.set(directory);
     }
 
     private ObjectProperty<File> path = new SimpleObjectProperty<>();
 
-    public PathRecord(@NotNull Class referClass) {
+    public PathRecord(@NotNull Class referClass, @NotNull String key) {
         this.referClass = referClass;
-        path.set(new File(Preferences.userNodeForPackage(referClass).get(LAST_VISIT_DIRECTORY, System.getProperty("java.io.tmpdir"))));
+        this.key = key;
+        path.set(new File(Preferences.userNodeForPackage(referClass).get(key, System.getProperty("java.io.tmpdir"))));
     }
 
     private final Class referClass;
@@ -34,4 +34,5 @@ public class PathRecord {
     public ObjectProperty<File> pathProperty() {
         return path;
     }
+
 }

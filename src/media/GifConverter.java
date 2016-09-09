@@ -43,7 +43,7 @@ public class GifConverter extends Executor {
                     return;
                 }
 
-                final int duration = FfmpegUtil.getConvertDuration(newValue);
+                final double duration = FfmpegUtil.getConvertDuration(newValue);
                 if (duration >= 0) {
                     updateProgressOnUiThread(duration / parameters.getConvertDuration());
                 }

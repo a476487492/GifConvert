@@ -3,6 +3,7 @@ package com.getting.gifconvert;
 import binding.VideoDurationLabelFormatter;
 import binding.VideoDurationStringFormatter;
 import com.getting.util.FileUtil;
+import com.getting.util.PathRecord;
 import com.getting.util.binding.NullableObjectStringFormatter;
 import com.getting.util.executor.ExecuteResult;
 import javafx.beans.property.ObjectProperty;
@@ -197,20 +198,26 @@ public class MainController implements Initializable {
         });
     }
 
+    private final PathRecord pathRecord = new PathRecord(MainController.class, "last visit directory");
+
     @FXML
-    private void onChooseVideo(ActionEvent event) {
+    private void onChooseVideo() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("视频文件", GifConvertParameters.SUPPORT_VIDEO_FORMATS));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("所有文件", "*.*"));
+        if (pathRecord.getPath().isDirectory()) {
+            fileChooser.setInitialDirectory(pathRecord.getPath());
+        }
 
         File chooseFile = fileChooser.showOpenDialog(gifPreviewView.getScene().getWindow());
         if (chooseFile != null) {
             inputVideo.set(chooseFile);
+            pathRecord.set(chooseFile.getParentFile());
         }
     }
 
     @FXML
-    private void onOpenSaveDirectory(ActionEvent event) {
+    private void onOpenSaveDirectory() {
         if (inputVideo.get() == null) {
             return;
         }
