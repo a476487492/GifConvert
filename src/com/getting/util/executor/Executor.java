@@ -2,6 +2,8 @@ package com.getting.util.executor;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,13 +13,15 @@ import java.util.List;
 
 public class Executor {
 
-    public static boolean LOG = true;
+    private final static boolean OPEN_LOG = true;
 
     private final Class loaderClass;
 
     private final String executorName;
 
     private final File executorFile;
+
+    private DoubleProperty executeProgress = new SimpleDoubleProperty(Double.NaN);
 
     private Process executor;
 
@@ -42,7 +46,7 @@ public class Executor {
                 outputStream.write(buffer, 0, readCount);
             }
 
-            if (LOG) {
+            if (OPEN_LOG) {
                 System.out.println(executorName + " has copied to " + executorFile);
             }
         } catch (IOException e) {
@@ -52,7 +56,7 @@ public class Executor {
 
     private void ensureExecutorAvailable() {
         if (executorFile.exists() && executorFile.isFile()) {
-            if (LOG) {
+            if (OPEN_LOG) {
                 System.out.println(executorFile + " exists");
             }
             return;
@@ -67,14 +71,14 @@ public class Executor {
         }
 
         if (outputDirectory.exists() && outputDirectory.isDirectory()) {
-            if (LOG) {
+            if (OPEN_LOG) {
                 System.out.println(outputDirectory + " exists");
             }
             return;
         }
 
         boolean mkdirsSuccess = outputDirectory.mkdirs();
-        if (LOG) {
+        if (OPEN_LOG) {
             System.out.println(outputDirectory + " mkdirs " + mkdirsSuccess);
         }
     }
@@ -107,7 +111,7 @@ public class Executor {
                     break;
                 }
 
-                if (LOG) {
+                if (OPEN_LOG) {
                     System.out.println(message);
                 }
 
@@ -134,6 +138,10 @@ public class Executor {
 
         isCanceled = true;
         executor.destroy();
+    }
+
+    public DoubleProperty executeProgressProperty() {
+        return executeProgress;
     }
 
     /**
@@ -166,7 +174,7 @@ public class Executor {
 //                            break;
 //                        }
 //
-//                        if (LOG) {
+//                        if (OPEN_LOG) {
 //                            System.out.println(message);
 //                        }
 //                    }

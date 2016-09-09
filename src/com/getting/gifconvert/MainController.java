@@ -100,7 +100,7 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         showLoadingImage();
 
-        statusBar.progressProperty().bind(gifConverter.convertProgressProperty());
+        statusBar.progressProperty().bind(gifConverter.executeProgressProperty());
         videoInfoView.textProperty().bind(new NullableObjectStringFormatter<>(gifConverter.videoInfoProperty()));
         inputVideoStartTimeView.textProperty().bind(new VideoDurationStringFormatter(inputVideoDurationView.lowValueProperty()));
         inputVideoEndTimeView.textProperty().bind(new VideoDurationStringFormatter(inputVideoDurationView.highValueProperty()));
