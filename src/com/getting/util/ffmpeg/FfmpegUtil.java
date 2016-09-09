@@ -16,7 +16,7 @@ public class FfmpegUtil {
 
     private static final Pattern VIDEO_FRAME_RATE_PATTERN = Pattern.compile("(?<frame>[0-9.]+) fps", Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern CONVERT_PROGRESS_PATTERN = Pattern.compile("time=(?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})\\.(?<millsecond>\\d{2})", Pattern.CASE_INSENSITIVE);
+    private static final Pattern CONVERT_PROGRESS_PATTERN = Pattern.compile("time=(?<duration>(?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})\\.(?<millsecond>\\d{2}))", Pattern.CASE_INSENSITIVE);
 
     /**
      * @param messages Output of "ffmpeg -i file"
@@ -87,18 +87,32 @@ public class FfmpegUtil {
     }
 
     /**
-     * @param messages Output of "ffmpeg -i input ouput"
+     * @param messages Output of "ffmpeg -i input output"
      */
     @Nullable
-    public static double getConvertDuration(@NotNull String messages) {
+    public static Duration getConvertDuration(@NotNull String messages) {
         for (String split : messages.split(" ")) {
             Matcher matcher = CONVERT_PROGRESS_PATTERN.matcher(split);
             if (matcher.matches()) {
-                return Integer.parseInt(matcher.group("hour")) * 60 * 60 + Integer.parseInt(matcher.group("minute")) * 60 + Integer.parseInt(matcher.group("second"));
+                return new Duration(matcher.group("duration"), Integer.parseInt(matcher.group("hour")) * 60 * 60 + Integer.parseInt(matcher.group("minute")) * 60 + Integer.parseInt(matcher.group("second")));
             }
         }
 
-        return -1;
+        return null;
+    }
+
+    public static final class Duration {
+
+        public final String description;
+
+        public final double duration;
+
+        public Duration(String description, double duration) {
+            this.description = description;
+
+            this.duration = duration;
+        }
+
     }
 
 }
