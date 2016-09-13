@@ -1,11 +1,12 @@
 package media;
 
-import com.getting.util.ffmpeg.FfmpegUtil;
-import com.sun.istack.internal.NotNull;
 import com.getting.util.executor.ExecuteResult;
 import com.getting.util.executor.Executor;
+import com.getting.util.ffmpeg.FfmpegUtil;
+import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

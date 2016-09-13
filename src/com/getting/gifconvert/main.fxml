@@ -9,7 +9,6 @@
 <?import org.controlsfx.control.RangeSlider?>
 <?import org.controlsfx.control.StatusBar?>
 <?import org.controlsfx.control.ToggleSwitch?>
-<?import javafx.scene.image.Image?>
 <NotificationPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0"
                   xmlns="http://javafx.com/javafx/8"
                   fx:controller="com.getting.gifconvert.MainController" fx:id="notificationPane" showFromTop="false">

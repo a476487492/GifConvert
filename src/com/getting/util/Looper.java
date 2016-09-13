@@ -89,4 +89,10 @@ public class Looper {
         }
     }
 
+    public boolean isAllDone() {
+        synchronized (lock) {
+            return tasks.isEmpty() && currentTask == null;
+        }
+    }
+
 }

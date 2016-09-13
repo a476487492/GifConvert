@@ -2,7 +2,9 @@ package com.getting.gifconvert;
 
 import binding.VideoDurationLabelFormatter;
 import binding.VideoDurationStringFormatter;
+import com.getting.util.AsyncTask;
 import com.getting.util.FileUtil;
+import com.getting.util.Looper;
 import com.getting.util.PathRecord;
 import com.getting.util.binding.NullableObjectStringFormatter;
 import com.getting.util.executor.ExecuteResult;
@@ -10,7 +12,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,8 +31,6 @@ import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
 import org.controlsfx.control.ToggleSwitch;
-import com.getting.util.Looper;
-import com.getting.util.AsyncTask;
 
 import java.io.File;
 import java.io.IOException;
