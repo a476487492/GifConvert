@@ -24,6 +24,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.WindowEvent;
 import media.GifConvertParameters;
 import media.GifConverter;
 import media.VideoInfo;
@@ -213,6 +214,16 @@ public class MainController implements Initializable {
             inputVideo.set(chooseFile);
             pathRecord.set(chooseFile.getParentFile());
         }
+
+        gifPreviewView.getScene().getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                convertLoop.removeAllTasks();
+                uiLoop.removeAllTasks();
+            }
+
+        });
     }
 
     @FXML
