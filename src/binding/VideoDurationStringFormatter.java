@@ -5,7 +5,7 @@ import javafx.beans.property.DoubleProperty;
 
 public class VideoDurationStringFormatter extends StringFormatter {
 
-    private DoubleProperty durationProperty;
+    private final DoubleProperty durationProperty;
 
     public VideoDurationStringFormatter(DoubleProperty durationProperty) {
         super.bind(durationProperty);

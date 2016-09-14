@@ -4,6 +4,10 @@ import javafx.application.Platform;
 
 public abstract class AsyncTask<R> extends Task {
 
+    public AsyncTask(Object id, long delay) {
+        super(id, delay);
+    }
+
     public void preTaskOnUi() {
     }
 
@@ -14,29 +18,11 @@ public abstract class AsyncTask<R> extends Task {
 
     @Override
     public final void run() {
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                preTaskOnUi();
-            }
-
-        });
+        Platform.runLater(this::preTaskOnUi);
 
         R result = runTask();
 
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                postTaskOnUi(result);
-            }
-
-        });
-    }
-
-    public AsyncTask(Object id, long delay) {
-        super(id, delay);
+        Platform.runLater(() -> postTaskOnUi(result));
     }
 
 }

@@ -8,11 +8,11 @@ import java.util.List;
 
 public class VideoInfoParameters implements Parameters {
 
+    private final File video;
+
     public VideoInfoParameters(File video) {
         this.video = video;
     }
-
-    private final File video;
 
     @Override
     public List<String> build() {

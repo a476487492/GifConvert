@@ -11,8 +11,6 @@ import com.getting.util.executor.ExecuteResult;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
@@ -20,14 +18,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.WindowEvent;
 import media.GifConvertParameters;
 import media.GifConverter;
-import media.VideoInfo;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
@@ -55,46 +50,33 @@ public class MainController implements Initializable {
     private final Looper uiLoop = new Looper();
 
     private final Image loadingImage = new Image(MainController.class.getResource("loading.gif").toExternalForm(), true);
-
+    private final PathRecord pathRecord = new PathRecord(MainController.class, "last visit directory");
     @FXML
     private ImageView gifPreviewView;
-
     @FXML
     private Slider gifFrameRateView;
-
     @FXML
     private Slider gifScaleView;
-
     @FXML
     private RangeSlider inputVideoDurationView;
-
     @FXML
     private Label inputVideoStartTimeView;
-
     @FXML
     private Label inputVideoEndTimeView;
-
     @FXML
     private Pane inputVideoDurationPane;
-
     @FXML
     private CheckMenuItem reverseGifView;
-
     @FXML
     private CheckMenuItem addLogoView;
-
     @FXML
     private ToggleSwitch videoDurationDetailView;
-
     @FXML
     private Label videoInfoView;
-
     @FXML
     private NotificationPane notificationPane;
-
     @FXML
     private StatusBar statusBar;
-
     private ObjectProperty<File> inputVideo = new SimpleObjectProperty<>();
 
     @Override
@@ -108,14 +90,9 @@ public class MainController implements Initializable {
         inputVideoDurationView.setLabelFormatter(new VideoDurationLabelFormatter());
 
         {
-            final ChangeListener<Number> convertParameterChangeListener = new ChangeListener<Number>() {
-
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    reloadInputVideoDuration();
-                    reloadGifConvert(1000);
-                }
-
+            final ChangeListener<Number> convertParameterChangeListener = (observable, oldValue, newValue) -> {
+                reloadInputVideoDuration();
+                reloadGifConvert(1000);
             };
 
             inputVideoDurationView.lowValueProperty().addListener(convertParameterChangeListener);
@@ -123,82 +100,33 @@ public class MainController implements Initializable {
         }
 
         {
-            final ChangeListener<Number> convertParameterChangeListener = new ChangeListener<Number>() {
-
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    reloadGifConvert(1000);
-                }
-
-            };
+            final ChangeListener<Number> convertParameterChangeListener = (observable, oldValue, newValue) -> reloadGifConvert(1000);
 
             gifScaleView.valueProperty().addListener(convertParameterChangeListener);
             gifFrameRateView.valueProperty().addListener(convertParameterChangeListener);
         }
 
         {
-            final ChangeListener<Boolean> convertParameterChangeListener = new ChangeListener<Boolean>() {
-
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    reloadGifConvert(0);
-                }
-
-            };
+            final ChangeListener<Boolean> convertParameterChangeListener = (observable, oldValue, newValue) -> reloadGifConvert(0);
 
             reverseGifView.selectedProperty().addListener(convertParameterChangeListener);
             addLogoView.selectedProperty().addListener(convertParameterChangeListener);
         }
 
-        inputVideo.addListener(new ChangeListener<File>() {
+        inputVideo.addListener((observable, oldValue, newValue) -> reloadVideoInfo());
 
-            @Override
-            public void changed(ObservableValue<? extends File> observable, File oldValue, File newValue) {
-                reloadVideoInfo();
+        gifConverter.videoInfoProperty().addListener((observable, oldValue, newValue) -> reloadInputVideoDuration());
+
+        videoDurationDetailView.selectedProperty().addListener((observable, oldValue, newValue) -> reloadInputVideoDuration());
+
+        gifPreviewView.setOnDragOver(event -> event.acceptTransferModes(TransferMode.LINK));
+        gifPreviewView.setOnDragDropped(event -> {
+            List<File> files = event.getDragboard().getFiles();
+            if (!files.isEmpty()) {
+                inputVideo.set(files.get(0));
             }
-
-        });
-
-        gifConverter.videoInfoProperty().addListener(new ChangeListener<VideoInfo>() {
-
-            @Override
-            public void changed(ObservableValue<? extends VideoInfo> observable, VideoInfo oldValue, VideoInfo newValue) {
-                reloadInputVideoDuration();
-            }
-
-        });
-
-        videoDurationDetailView.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                reloadInputVideoDuration();
-            }
-
-        });
-
-        gifPreviewView.setOnDragOver(new EventHandler<DragEvent>() {
-
-            @Override
-            public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.LINK);
-            }
-
-        });
-        gifPreviewView.setOnDragDropped(new EventHandler<DragEvent>() {
-
-            @Override
-            public void handle(DragEvent event) {
-                List<File> files = event.getDragboard().getFiles();
-                if (!files.isEmpty()) {
-                    inputVideo.set(files.get(0));
-                }
-            }
-
         });
     }
-
-    private final PathRecord pathRecord = new PathRecord(MainController.class, "last visit directory");
 
     @FXML
     private void onChooseVideo() {
@@ -215,14 +143,9 @@ public class MainController implements Initializable {
             pathRecord.set(chooseFile.getParentFile());
         }
 
-        gifPreviewView.getScene().getWindow().setOnCloseRequest(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                convertLoop.removeAllTasks();
-                uiLoop.removeAllTasks();
-            }
-
+        gifPreviewView.getScene().getWindow().setOnCloseRequest(event -> {
+            convertLoop.removeAllTasks();
+            uiLoop.removeAllTasks();
         });
     }
 
@@ -305,13 +228,13 @@ public class MainController implements Initializable {
         notificationPane.show(message);
 
         uiLoop.removeTask(MSG_HIDE_NOTIFICATION);
-        uiLoop.postTask(new HideNotificationTask(3000));
+        uiLoop.postTask(new HideNotificationTask());
     }
 
     private class HideNotificationTask extends AsyncTask<Void> {
 
-        public HideNotificationTask(long delay) {
-            super(MSG_HIDE_NOTIFICATION, delay);
+        public HideNotificationTask() {
+            super(MSG_HIDE_NOTIFICATION, 3000);
         }
 
         @Override
@@ -347,6 +270,8 @@ public class MainController implements Initializable {
 
     private class GifConvertTask extends AsyncTask<ExecuteResult> {
 
+        private final GifConvertParameters parameters;
+
         public GifConvertTask(long delay) {
             super(MSG_CONVERT_VIDEO, delay);
             String logo = addLogoView.isSelected() ? new SimpleDateFormat().format(new Date()) : " ";
@@ -358,8 +283,6 @@ public class MainController implements Initializable {
                     reverseGifView.isSelected(),
                     logo);
         }
-
-        private final GifConvertParameters parameters;
 
         @Override
         public void preTaskOnUi() {

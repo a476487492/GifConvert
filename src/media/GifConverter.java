@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 import java.io.File;
 
@@ -16,7 +15,7 @@ public class GifConverter extends Executor {
 
     private static final String CONVERTER_NAME = "ffmpeg-20160213-git-588e2e3-win64-static.exe";
 
-    private ObjectProperty<VideoInfo> videoInfo = new SimpleObjectProperty<>();
+    private final ObjectProperty<VideoInfo> videoInfo = new SimpleObjectProperty<>();
 
     public GifConverter() {
         super(GifConverter.class, CONVERTER_NAME);
@@ -36,20 +35,15 @@ public class GifConverter extends Executor {
     public ExecuteResult convert(@NotNull GifConvertParameters parameters) {
         updateProgressOnUiThread(Double.NEGATIVE_INFINITY);
 
-        ChangeListener<String> progressListener = new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue == null) {
-                    return;
-                }
-
-                final FfmpegUtil.Duration duration = FfmpegUtil.getConvertDuration(newValue);
-                if (duration != null) {
-                    updateProgressOnUiThread(duration.duration / parameters.getConvertDuration());
-                }
+        ChangeListener<String> progressListener = (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
             }
 
+            final FfmpegUtil.Duration duration = FfmpegUtil.getConvertDuration(newValue);
+            if (duration != null) {
+                updateProgressOnUiThread(duration.duration / parameters.getConvertDuration());
+            }
         };
         executorOutputMessage.addListener(progressListener);
         ExecuteResult convertResult = execute(parameters, false);
@@ -64,25 +58,11 @@ public class GifConverter extends Executor {
     }
 
     private void updateProgressOnUiThread(double progress) {
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                GifConverter.this.executeProgressProperty().set(progress);
-            }
-
-        });
+        Platform.runLater(() -> GifConverter.this.executeProgressProperty().set(progress));
     }
 
     private void updateMediaInfoOnUiThread(VideoInfo videoInfo) {
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                GifConverter.this.videoInfo.set(videoInfo);
-            }
-
-        });
+        Platform.runLater(() -> GifConverter.this.videoInfo.set(videoInfo));
     }
 
 }

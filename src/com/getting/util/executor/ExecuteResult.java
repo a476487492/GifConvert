@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ExecuteResult {
 
-    protected final long costTime;
+    private final long costTime;
 
     private final boolean success;
 

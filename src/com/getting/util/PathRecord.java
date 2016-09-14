@@ -11,13 +11,8 @@ import java.util.prefs.Preferences;
 public class PathRecord {
 
     private final String key;
-
-    public void set(@NotNull File directory) {
-        Preferences.userNodeForPackage(referClass).put(key, directory.getAbsolutePath());
-        path.set(directory);
-    }
-
-    private ObjectProperty<File> path = new SimpleObjectProperty<>();
+    private final Class referClass;
+    private final ObjectProperty<File> path = new SimpleObjectProperty<>();
 
     public PathRecord(@NotNull Class referClass, @NotNull String key) {
         this.referClass = referClass;
@@ -25,7 +20,10 @@ public class PathRecord {
         path.set(new File(Preferences.userNodeForPackage(referClass).get(key, System.getProperty("java.io.tmpdir"))));
     }
 
-    private final Class referClass;
+    public void set(@NotNull File directory) {
+        Preferences.userNodeForPackage(referClass).put(key, directory.getAbsolutePath());
+        path.set(directory);
+    }
 
     public File getPath() {
         return path.get();

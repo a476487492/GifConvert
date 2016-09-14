@@ -13,16 +13,12 @@ import java.util.List;
 
 public class Executor {
 
+    protected final StringProperty executorOutputMessage = new SimpleStringProperty();
     private final Class loaderClass;
-
     private final String executorName;
-
     private final File executorFile;
-
-    private DoubleProperty executeProgress = new SimpleDoubleProperty(Double.NaN);
-
+    private final DoubleProperty executeProgress = new SimpleDoubleProperty(Double.NaN);
     private Process executor;
-
     private boolean isCanceled;
 
     public Executor(@NotNull Class loaderClass, @NotNull String executorName) {
@@ -72,8 +68,6 @@ public class Executor {
         boolean mkdirsSuccess = outputDirectory.mkdirs();
         System.out.println(outputDirectory + " mkdirs " + mkdirsSuccess);
     }
-
-    protected final StringProperty executorOutputMessage = new SimpleStringProperty();
 
     @Nullable
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
@@ -135,42 +129,36 @@ public class Executor {
     /**
      * Another way to destroy the process, run on a new thread
      */
-//    public void forceCancel() {
-//        if (executor == null) {
-//            return;
-//        }
-//
-//        isCanceled = true;
-//        new Thread() {
-//
-//            public void run() {
-//                ArrayList<String> command = new ArrayList<>();
-//                command.add("taskkill");
-//                command.add("/F");
-//                command.add("/IM");
-//                command.add(executorName);
-//                command.add("/T");
-//                ProcessBuilder processBuilder = new ProcessBuilder(command);
-//                processBuilder.redirectErrorStream(true);
-//
-//                try {
-//                    Process process = processBuilder.start();
-//                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//                    while (true) {
-//                        String message = reader.readLine();
-//                        if (message == null) {
-//                            break;
-//                        }
-//
-//                        System.out.println(message);
-//                    }
-//                    process.waitFor();
-//                } catch (InterruptedException | IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        }.start();
-//    }
+    public void forceCancel() {
+        if (executor == null) {
+            return;
+        }
+
+        isCanceled = true;
+        ArrayList<String> command = new ArrayList<>();
+        command.add("taskkill");
+        command.add("/F");
+        command.add("/IM");
+        command.add(executorName);
+        command.add("/T");
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        processBuilder.redirectErrorStream(true);
+
+        try {
+            Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            while (true) {
+                String message = reader.readLine();
+                if (message == null) {
+                    break;
+                }
+
+                System.out.println(message);
+            }
+            process.waitFor();
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

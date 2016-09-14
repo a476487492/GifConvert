@@ -23,9 +23,8 @@ public class VideoInfo {
     }
 
     /**
-     * second
      *
-     * @return
+     * @return second
      */
     public double getDuration() {
         return duration;

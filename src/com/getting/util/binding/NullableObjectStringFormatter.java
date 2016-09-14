@@ -6,7 +6,7 @@ import javafx.beans.property.ObjectProperty;
 
 public class NullableObjectStringFormatter<T> extends StringFormatter {
 
-    private ObjectProperty<T> objectProperty;
+    private final ObjectProperty<T> objectProperty;
 
     public NullableObjectStringFormatter(ObjectProperty<T> objectProperty) {
         super.bind(objectProperty);
