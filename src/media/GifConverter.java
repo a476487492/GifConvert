@@ -3,6 +3,8 @@ package media;
 import com.getting.util.executor.ExecuteResult;
 import com.getting.util.executor.Executor;
 import com.getting.util.ffmpeg.FfmpegUtil;
+import com.getting.util.ffmpeg.VideoInfo;
+import com.getting.util.ffmpeg.VideoInfoParameters;
 import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;

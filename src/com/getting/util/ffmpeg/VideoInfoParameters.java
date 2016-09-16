@@ -1,4 +1,4 @@
-package media;
+package com.getting.util.ffmpeg;
 
 import com.getting.util.executor.Parameters;
 

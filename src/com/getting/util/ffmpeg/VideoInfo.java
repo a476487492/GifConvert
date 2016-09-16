@@ -1,6 +1,4 @@
-package media;
-
-import com.getting.util.ffmpeg.FfmpegUtil;
+package com.getting.util.ffmpeg;
 
 import java.awt.*;
 import java.util.List;
@@ -22,8 +20,11 @@ public class VideoInfo {
         durationDescription = FfmpegUtil.parseDurationDescription(messages);
     }
 
+    public String getDurationDescription() {
+        return durationDescription;
+    }
+
     /**
-     *
      * @return second
      */
     public double getDuration() {
