@@ -5,10 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.*?>
-<?import org.controlsfx.control.NotificationPane?>
-<?import org.controlsfx.control.RangeSlider?>
-<?import org.controlsfx.control.StatusBar?>
-<?import org.controlsfx.control.ToggleSwitch?>
+<?import org.controlsfx.control.*?>
 <NotificationPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="900.0"
                   xmlns="http://javafx.com/javafx/8"
                   fx:controller="com.getting.gifconvert.MainController" fx:id="notificationPane" showFromTop="false">
@@ -51,16 +48,16 @@
                         <VBox>
                             <Label text="帧率："/>
                             <Slider showTickMarks="true" fx:id="gifFrameRateView"
-                                    showTickLabels="true" min="1" max="25" minorTickCount="2" value="7"
-                                    majorTickUnit="5"/>
+                                    showTickLabels="true" min="2" max="18" minorTickCount="2" value="7"
+                                    majorTickUnit="4"/>
 
                             <Label prefHeight="30"/>
 
                             <Label text="缩放："/>
                             <Slider showTickMarks="true"
-                                    fx:id="gifScaleView" value="1"
-                                    showTickLabels="true" min="0.1" max="1"
-                                    majorTickUnit="0.3"/>
+                                    fx:id="gifScaleView" value="0.8"
+                                    showTickLabels="true" min="0.2" max="1"
+                                    majorTickUnit="0.2"/>
 
                             <BorderPane.margin>
                                 <Insets left="10.0" right="10.0" top="50"/>
@@ -73,8 +70,8 @@
                             <center>
                                 <BorderPane BorderPane.alignment="CENTER">
                                     <center>
-                                        <RangeSlider fx:id="inputVideoDurationView" showTickMarks="true"
-                                                     minorTickCount="5"
+                                        <RangeSlider fx:id="inputVideoDurationView" showTickMarks="false"
+                                                     minorTickCount="4"
                                                      showTickLabels="true"
                                                      BorderPane.alignment="CENTER">
 
@@ -91,19 +88,23 @@
                                     <right>
                                         <Label fx:id="inputVideoEndTimeView"/>
                                     </right>
+
+                                    <BorderPane.margin>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </BorderPane.margin>
                                 </BorderPane>
                             </center>
 
+                            <left>
+                                <PlusMinusSlider prefWidth="20" onValueChanged="#onLowAdjust"/>
+                            </left>
+
                             <right>
-                                <ToggleSwitch fx:id="videoDurationDetailView" text="微调">
-                                    <BorderPane.margin>
-                                        <Insets left="30.0" right="30.0"/>
-                                    </BorderPane.margin>
-                                </ToggleSwitch>
+                                <PlusMinusSlider prefWidth="20" onValueChanged="#onHighAdjust"/>
                             </right>
 
                             <BorderPane.margin>
-                                <Insets bottom="10.0" left="60.0" right="60.0" top="10.0"/>
+                                <Insets bottom="10.0" left="30.0" right="30.0" top="10.0"/>
                             </BorderPane.margin>
                         </BorderPane>
                     </bottom>

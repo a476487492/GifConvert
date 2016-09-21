@@ -24,9 +24,9 @@ import javafx.stage.FileChooser;
 import media.GifConvertParameters;
 import media.GifConverter;
 import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.PlusMinusSlider;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
-import org.controlsfx.control.ToggleSwitch;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,14 +41,12 @@ public class MainController implements Initializable {
 
     private static final Object MSG_CONVERT_VIDEO = new Object();
 
-    private static final Object MSG_RELOAD_VIDEO_INFO = new Object();
-
     private final GifConverter gifConverter = new GifConverter();
     private final Looper convertLoop = new Looper();
     private final Looper uiLoop = new Looper();
 
     private final Image loadingImage = new Image(MainController.class.getResource("loading.gif").toExternalForm(), true);
-    private final PathRecord pathRecord = new PathRecord(MainController.class, "last visit directory");
+    private final PathRecord lastVisitPathRecord = new PathRecord(MainController.class, "last visit directory");
     @FXML
     private ImageView gifPreviewView;
     @FXML
@@ -68,8 +66,6 @@ public class MainController implements Initializable {
     @FXML
     private CheckMenuItem addLogoView;
     @FXML
-    private ToggleSwitch videoDurationDetailView;
-    @FXML
     private Label videoInfoView;
     @FXML
     private NotificationPane notificationPane;
@@ -88,18 +84,10 @@ public class MainController implements Initializable {
         inputVideoDurationView.setLabelFormatter(new VideoDurationLabelFormatter());
 
         {
-            final ChangeListener<Number> convertParameterChangeListener = (observable, oldValue, newValue) -> {
-                reloadInputVideoDuration();
-                reloadGifConvert(1000);
-            };
+            final ChangeListener<Number> convertParameterChangeListener = (observable, oldValue, newValue) -> reloadGifConvert(1000);
 
             inputVideoDurationView.lowValueProperty().addListener(convertParameterChangeListener);
             inputVideoDurationView.highValueProperty().addListener(convertParameterChangeListener);
-        }
-
-        {
-            final ChangeListener<Number> convertParameterChangeListener = (observable, oldValue, newValue) -> reloadGifConvert(1000);
-
             gifScaleView.valueProperty().addListener(convertParameterChangeListener);
             gifFrameRateView.valueProperty().addListener(convertParameterChangeListener);
         }
@@ -111,11 +99,15 @@ public class MainController implements Initializable {
             addLogoView.selectedProperty().addListener(convertParameterChangeListener);
         }
 
-        inputVideo.addListener((observable, oldValue, newValue) -> reloadVideoInfo());
+        inputVideo.addListener((observable, oldValue, newValue) -> convertLoop.postTask(new ReloadVideoInfoTask()));
 
-        gifConverter.videoInfoProperty().addListener((observable, oldValue, newValue) -> reloadInputVideoDuration());
-
-        videoDurationDetailView.selectedProperty().addListener((observable, oldValue, newValue) -> reloadInputVideoDuration());
+        gifConverter.videoInfoProperty().addListener((observable, oldValue, newValue) -> {
+            final double duration = newValue.getDuration();
+            inputVideoDurationView.setMin(0);
+            inputVideoDurationView.setMax(duration);
+            inputVideoDurationView.setMajorTickUnit(duration / 10);
+            inputVideoDurationPane.setVisible(true);
+        });
 
         gifPreviewView.setOnDragOver(event -> event.acceptTransferModes(TransferMode.LINK));
         gifPreviewView.setOnDragDropped(event -> {
@@ -131,14 +123,14 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("视频文件", GifConvertParameters.SUPPORT_VIDEO_FORMATS));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("所有文件", "*.*"));
-        if (pathRecord.getPath().isDirectory()) {
-            fileChooser.setInitialDirectory(pathRecord.getPath());
+        if (lastVisitPathRecord.getPath().isDirectory()) {
+            fileChooser.setInitialDirectory(lastVisitPathRecord.getPath());
         }
 
         File chooseFile = fileChooser.showOpenDialog(gifPreviewView.getScene().getWindow());
         if (chooseFile != null) {
             inputVideo.set(chooseFile);
-            pathRecord.set(chooseFile.getParentFile());
+            lastVisitPathRecord.set(chooseFile.getParentFile());
         }
 
         gifPreviewView.getScene().getWindow().setOnCloseRequest(event -> {
@@ -162,25 +154,6 @@ public class MainController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void reloadInputVideoDuration() {
-        if (gifConverter.videoInfoProperty().get() == null) {
-            return;
-        }
-
-        final double duration = gifConverter.videoInfoProperty().get().getDuration();
-
-        if (videoDurationDetailView.isSelected()) {
-            inputVideoDurationView.setMin(Math.max(0, inputVideoDurationView.getLowValue() - 10));
-            inputVideoDurationView.setMax(Math.min(duration, inputVideoDurationView.getHighValue() + 10));
-        } else {
-            inputVideoDurationView.setMin(0);
-            inputVideoDurationView.setMax(duration);
-        }
-        inputVideoDurationView.setMajorTickUnit((inputVideoDurationView.getMax() - inputVideoDurationView.getMin()) / 10);
-
-        inputVideoDurationPane.setVisible(true);
     }
 
     private void reloadGifConvert(long delay) {
@@ -209,15 +182,6 @@ public class MainController implements Initializable {
         convertLoop.postTask(new GifConvertTask(delay));
     }
 
-    private void reloadVideoInfo() {
-        convertLoop.removeTask(MSG_RELOAD_VIDEO_INFO);
-        if (inputVideo.get() == null) {
-            return;
-        }
-
-        convertLoop.postTask(new ReloadVideoInfoTask());
-    }
-
     private void showLoadingImage() {
         gifPreviewView.setImage(loadingImage);
     }
@@ -226,6 +190,16 @@ public class MainController implements Initializable {
         notificationPane.show(message);
 
         uiLoop.postTask(new HideNotificationTask());
+    }
+
+    @FXML
+    public void onLowAdjust(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
+        inputVideoDurationView.setLowValue(inputVideoDurationView.getLowValue() + Math.copySign(0.1, plusMinusEvent.getValue()));
+    }
+
+    @FXML
+    public void onHighAdjust(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
+        inputVideoDurationView.setHighValue(inputVideoDurationView.getHighValue() + Math.copySign(0.1, plusMinusEvent.getValue()));
     }
 
     private class HideNotificationTask extends AsyncTask<Void> {
@@ -249,7 +223,7 @@ public class MainController implements Initializable {
     private class ReloadVideoInfoTask extends AsyncTask<Void> {
 
         public ReloadVideoInfoTask() {
-            super(MSG_RELOAD_VIDEO_INFO, 0);
+            super(null, 0);
         }
 
         @Override
