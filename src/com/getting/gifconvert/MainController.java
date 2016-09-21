@@ -39,8 +39,6 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    private static final Object MSG_HIDE_NOTIFICATION = new Object();
-
     private static final Object MSG_CONVERT_VIDEO = new Object();
 
     private static final Object MSG_RELOAD_VIDEO_INFO = new Object();
@@ -227,14 +225,13 @@ public class MainController implements Initializable {
     private void showNotificationForAWhile(String message) {
         notificationPane.show(message);
 
-        uiLoop.removeTask(MSG_HIDE_NOTIFICATION);
         uiLoop.postTask(new HideNotificationTask());
     }
 
     private class HideNotificationTask extends AsyncTask<Void> {
 
         public HideNotificationTask() {
-            super(MSG_HIDE_NOTIFICATION, 3000);
+            super(null, 3000);
         }
 
         @Override

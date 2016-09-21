@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src_looper" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src_media" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src_ui" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src_tools" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
