@@ -4,7 +4,7 @@
 
 # 演示
 
-![演示](https://cloud.githubusercontent.com/assets/13044819/14780377/3fced308-0b0f-11e6-8ba1-be25c0e7195e.gif)
+![演示](https://cloud.githubusercontent.com/assets/13044819/18734579/84d93740-80a8-11e6-9c0a-02b571c98e85.gif)
 
 # 运行要求
 
