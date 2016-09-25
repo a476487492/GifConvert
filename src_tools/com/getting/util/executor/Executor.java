@@ -6,12 +6,16 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Executor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Executor.class);
 
     protected final StringProperty executorOutputMessage = new SimpleStringProperty();
     private final Class loaderClass;
@@ -40,7 +44,7 @@ public class Executor {
                 outputStream.write(buffer, 0, readCount);
             }
 
-            System.out.println(executorName + " has copied to " + executorFile);
+            LOGGER.info(executorName + " has copied to " + executorFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +52,7 @@ public class Executor {
 
     private void ensureExecutorAvailable() {
         if (executorFile.exists() && executorFile.isFile()) {
-            System.out.println(executorFile + " exists");
+            LOGGER.info(executorFile + " exists");
             return;
         }
 
@@ -61,12 +65,12 @@ public class Executor {
         }
 
         if (outputDirectory.exists() && outputDirectory.isDirectory()) {
-            System.out.println(outputDirectory + " exists");
+            LOGGER.info(outputDirectory + " exists");
             return;
         }
 
         boolean mkdirsSuccess = outputDirectory.mkdirs();
-        System.out.println(outputDirectory + " mkdirs " + mkdirsSuccess);
+        LOGGER.info(outputDirectory + " mkdirs " + mkdirsSuccess);
     }
 
     @Nullable
@@ -95,7 +99,7 @@ public class Executor {
                     break;
                 }
 
-                System.out.println(message);
+                LOGGER.info(message);
 
                 executorOutputMessage.set(message);
                 if (needMessages) {
@@ -153,7 +157,7 @@ public class Executor {
                     break;
                 }
 
-                System.out.println(message);
+                LOGGER.info(message);
             }
             process.waitFor();
         } catch (InterruptedException | IOException e) {
