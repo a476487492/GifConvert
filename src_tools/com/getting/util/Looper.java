@@ -1,11 +1,16 @@
 package com.getting.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 public class Looper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Looper.class);
 
     private final Object lock = new Object();
 
@@ -24,7 +29,7 @@ public class Looper {
                             try {
                                 lock.wait();
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                LOGGER.error("run", e);
                             }
                             continue;
                         }
@@ -34,7 +39,7 @@ public class Looper {
                             try {
                                 lock.wait(waitTime);
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                LOGGER.error("run", e);
                             }
                             continue;
                         }
@@ -42,6 +47,7 @@ public class Looper {
                         currentTask = tasks.remove(0);
                     }
 
+                    LOGGER.info(currentTask + " run ");
                     currentTask.run();
                     currentTask = null;
                 }
@@ -54,6 +60,7 @@ public class Looper {
 
 
     public void postTask(Task task) {
+        LOGGER.info("postTask: " + task);
         synchronized (lock) {
             tasks.add(task);
             Collections.sort(tasks);
@@ -62,6 +69,7 @@ public class Looper {
     }
 
     public void removeTask(Object id) {
+        LOGGER.info("removeTask: " + id);
         synchronized (lock) {
             Iterator<Task> iterator = tasks.iterator();
             while (iterator.hasNext()) {

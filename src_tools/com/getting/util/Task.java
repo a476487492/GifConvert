@@ -30,4 +30,9 @@ public abstract class Task implements Comparable<Task> {
         return timeRunAt.compareTo(o.timeRunAt);
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + "{" + String.valueOf(id) + "}";
+    }
+
 }
