@@ -2,8 +2,6 @@ package com.getting.util.executor;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.slf4j.Logger;
@@ -21,9 +19,8 @@ public class Executor {
     private final Class loaderClass;
     private final String executorName;
     private final File executorFile;
-    private final DoubleProperty executeProgress = new SimpleDoubleProperty(Double.NaN);
     private Process executor;
-    private boolean isCanceled;
+    private boolean normalExecute;
 
     public Executor(@NotNull Class loaderClass, @NotNull String executorName) {
         this.loaderClass = loaderClass;
@@ -46,7 +43,7 @@ public class Executor {
 
             LOGGER.info(executorName + " has copied to " + executorFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("copyExecutorToTempDirectory", e);
         }
     }
 
@@ -89,7 +86,7 @@ public class Executor {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);
             executor = processBuilder.start();
-            isCanceled = false;
+            normalExecute = true;
 
             List<String> messages = new ArrayList<>();
             BufferedReader reader = new BufferedReader(new InputStreamReader(executor.getInputStream()));
@@ -107,11 +104,12 @@ public class Executor {
                 }
             }
 
-            return new ExecuteResult(executor.waitFor() == 0, isCanceled, System.currentTimeMillis() - startTime, messages);
+            return new ExecuteResult(normalExecute ? (executor.waitFor() == 0 ? ExecuteResult.Status.SUCCESS : ExecuteResult.Status.FAIL) : ExecuteResult.Status.CANCELED, System.currentTimeMillis() - startTime, messages);
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error("execute", e);
         } finally {
             executor = null;
+            parameters.setHasDone();
         }
 
         return null;
@@ -122,23 +120,19 @@ public class Executor {
             return;
         }
 
-        isCanceled = true;
+        normalExecute = false;
         executor.destroy();
     }
 
-    public DoubleProperty executeProgressProperty() {
-        return executeProgress;
-    }
-
     /**
-     * Another way to destroy the process, run on a new thread
+     * Another way to destroy the process
      */
     public void forceCancel() {
         if (executor == null) {
             return;
         }
 
-        isCanceled = true;
+        normalExecute = false;
         ArrayList<String> command = new ArrayList<>();
         command.add("taskkill");
         command.add("/F");
@@ -161,7 +155,7 @@ public class Executor {
             }
             process.waitFor();
         } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.toString());
         }
     }
 

@@ -1,16 +1,17 @@
 package com.getting.util.ffmpeg;
 
-import com.getting.util.executor.Parameters;
+import com.getting.util.executor.ParametersImp;
+import com.sun.istack.internal.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoInfoParameters implements Parameters {
+public class VideoInfoParameters extends ParametersImp {
 
     private final File video;
 
-    public VideoInfoParameters(File video) {
+    public VideoInfoParameters(@NotNull File video) {
         this.video = video;
     }
 

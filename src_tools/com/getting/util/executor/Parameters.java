@@ -10,6 +10,11 @@ public interface Parameters {
     @NotNull
     List<String> build();
 
+    @NotNull
     File getOutputDirectory();
+
+    boolean hasDone();
+
+    void setHasDone();
 
 }

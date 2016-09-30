@@ -277,11 +277,11 @@ public class MainController implements Initializable {
                 e.printStackTrace();
             }
 
-            if (result.isCanceled()) {
+            if (result.getStatus() == ExecuteResult.Status.CANCELED) {
                 return;
             }
 
-            showNotificationForAWhile(result.isSuccess() ? "转换时间：" + result.getCostTimeDescription() + "，转换后大小：" + FileUtil.getFileSizeDescription(parameters.getOutputFile()) : "转换失败！！是否选择了有效的视频文件？");
+            showNotificationForAWhile(result.getStatus() == ExecuteResult.Status.SUCCESS ? "转换时间：" + FileUtil.getCostTimeDescription(result.getCostTime()) + "，转换后大小：" + FileUtil.getFileSizeDescription(parameters.getOutputFile()) : "转换失败！！是否选择了有效的视频文件？");
         }
 
         @Override

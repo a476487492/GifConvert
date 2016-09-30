@@ -4,6 +4,7 @@ import com.sun.istack.internal.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 
 public class FileUtil {
 
@@ -50,6 +51,10 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getCostTimeDescription(long time) {
+        return NumberFormat.getNumberInstance().format(time / 1000.0) + " 秒";
     }
 
 }

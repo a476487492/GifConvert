@@ -1,7 +1,7 @@
 package media;
 
 import com.getting.util.executor.ExecuteResult;
-import com.getting.util.executor.Executor;
+import com.getting.util.executor.ProgressExecutorImp;
 import com.getting.util.ffmpeg.FfmpegUtil;
 import com.getting.util.ffmpeg.VideoInfo;
 import com.getting.util.ffmpeg.VideoInfoParameters;
@@ -13,7 +13,7 @@ import javafx.beans.value.ChangeListener;
 
 import java.io.File;
 
-public class GifConverter extends Executor {
+public class GifConverter extends ProgressExecutorImp {
 
     private static final String CONVERTER_NAME = "ffmpeg-20160915-6f062eb-win64-static.exe";
 
@@ -27,9 +27,10 @@ public class GifConverter extends Executor {
         updateProgressOnUiThread(Double.NEGATIVE_INFINITY);
         ExecuteResult result = execute(new VideoInfoParameters(file), true);
         updateProgressOnUiThread(Double.NaN);
-        if (result.isCanceled()) {
+        if (result.getStatus() == ExecuteResult.Status.CANCELED) {
             return;
         }
+
         VideoInfo videoInfo = new VideoInfo(result.getMessages());
         updateMediaInfoOnUiThread(videoInfo);
     }
