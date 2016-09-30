@@ -1,23 +1,26 @@
 package media;
 
 import com.getting.util.executor.ExecuteResult;
-import com.getting.util.executor.ProgressExecutorImp;
+import com.getting.util.executor.Executor;
 import com.getting.util.ffmpeg.FfmpegUtil;
 import com.getting.util.ffmpeg.VideoInfo;
 import com.getting.util.ffmpeg.VideoInfoParameters;
 import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 
 import java.io.File;
 
-public class GifConverter extends ProgressExecutorImp {
+public class GifConverter extends Executor {
 
     private static final String CONVERTER_NAME = "ffmpeg-20160915-6f062eb-win64-static.exe";
 
     private final ObjectProperty<VideoInfo> videoInfo = new SimpleObjectProperty<>();
+    private final DoubleProperty executeProgress = new SimpleDoubleProperty(Double.NaN);
 
     public GifConverter() {
         super(GifConverter.class, CONVERTER_NAME);
@@ -66,6 +69,14 @@ public class GifConverter extends ProgressExecutorImp {
 
     private void updateMediaInfoOnUiThread(VideoInfo videoInfo) {
         Platform.runLater(() -> GifConverter.this.videoInfo.set(videoInfo));
+    }
+
+    public double getExecuteProgress() {
+        return executeProgress.get();
+    }
+
+    public DoubleProperty executeProgressProperty() {
+        return executeProgress;
     }
 
 }
