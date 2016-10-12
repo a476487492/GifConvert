@@ -2,7 +2,7 @@ package com.getting.util;
 
 import com.sun.istack.internal.NotNull;
 
-public abstract class Task implements Comparable<Task> {
+public abstract class Task implements Comparable<Task>, Runnable {
 
     private final Long timeRunAt;
     private final Object id;
@@ -11,8 +11,6 @@ public abstract class Task implements Comparable<Task> {
         this.id = id;
         this.timeRunAt = delay + System.currentTimeMillis();
     }
-
-    public abstract void run();
 
     public void cancel() {
     }
