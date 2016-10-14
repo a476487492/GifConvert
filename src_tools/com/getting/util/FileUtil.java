@@ -12,7 +12,7 @@ public class FileUtil {
     private static final int MB = 1024 * KB;
     private static final int GB = 1024 * MB;
 
-    public static String getFileSizeDescription(@NotNull File file) {
+    public static String formatFileSize(@NotNull File file) {
         if (file.length() < MB) {
             return String.format("%.2f KB", 1.0 * file.length() / KB);
         } else if (file.length() < GB) {

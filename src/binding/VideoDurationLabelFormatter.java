@@ -1,12 +1,13 @@
 package binding;
 
+import com.getting.util.TimeUtil;
 import javafx.util.StringConverter;
 
 public class VideoDurationLabelFormatter extends StringConverter<Number> {
 
     @Override
     public String toString(Number object) {
-        return String.format("%02d:%02d", object.intValue() / 60, object.intValue() % 60);
+        return TimeUtil.simpleFormatTime(object.intValue());
     }
 
     @Override

@@ -18,7 +18,7 @@ public class FfmpegUtil {
 
     private static final Pattern CONVERT_PROGRESS_PATTERN = Pattern.compile("time=(?<duration>(?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})\\.(?<millsecond>\\d{2}))", Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern CONVERT_SPEED_PATTERN = Pattern.compile("speed=(?<speed>[0-9.]+)x", Pattern.CASE_INSENSITIVE);
+    private static final Pattern CONVERT_SPEED_PATTERN = Pattern.compile("speed=(?<speed>[0-9. ]+)x", Pattern.CASE_INSENSITIVE);
 
     /**
      * @param messages Output of "ffmpeg -i file"

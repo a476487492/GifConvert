@@ -23,4 +23,8 @@ public class TimeUtil {
         return builder.toString();
     }
 
+    public static String simpleFormatTime(double time) {
+        return String.format("%02d:%02d", ((int) time) / 60, ((int) time) % 60);
+    }
+
 }
