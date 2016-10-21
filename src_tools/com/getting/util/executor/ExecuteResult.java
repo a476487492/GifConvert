@@ -2,20 +2,30 @@ package com.getting.util.executor;
 
 import com.sun.istack.internal.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExecuteResult {
 
-    private final long costTime;
+    private long startTime;
+    private long endTime;
 
-    private final Status status;
+    private Status status = Status.FAIL;
 
-    private final List<String> messages;
+    private List<String> messages = new ArrayList<>();
 
-    public ExecuteResult(@NotNull Status status, long costTime, @NotNull List<String> messages) {
+    public ExecuteResult() {
+        startTime = System.currentTimeMillis();
+    }
+
+    public void setStatus(@NotNull Status status) {
         this.status = status;
-        this.costTime = costTime;
+        endTime = System.currentTimeMillis();
+    }
+
+    public void setMessages(@NotNull List<String> messages) {
         this.messages = messages;
+        endTime = System.currentTimeMillis();
     }
 
     @NotNull
@@ -29,7 +39,7 @@ public class ExecuteResult {
     }
 
     public long getCostTime() {
-        return costTime;
+        return endTime - startTime;
     }
 
     public enum Status {

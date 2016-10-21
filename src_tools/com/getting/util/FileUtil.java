@@ -1,12 +1,16 @@
 package com.getting.util;
 
 import com.sun.istack.internal.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
 
 public class FileUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
 
     private static final int KB = 1024;
     private static final int MB = 1024 * KB;
@@ -27,20 +31,26 @@ public class FileUtil {
         return name.substring(0, name.lastIndexOf("."));
     }
 
+    /**
+     * @param file
+     * @return ex.: .mkv
+     */
     public static String getFileExtension(@NotNull File file) {
         String name = file.getName();
         return name.substring(name.lastIndexOf("."), name.length());
     }
 
-    public static File ensureFileExist(@NotNull File file) {
+    public static File ensureFileNameAvailable(@NotNull File file) {
+        final String name = getFileNameWithoutExtension(file);
+        final String extension = getFileExtension(file);
         File correctFile = file;
         int suffix = 1;
         while (true) {
-            if (!correctFile.exists()) {
-                return correctFile;
-            } else {
-                correctFile = new File(file.getParentFile(), getFileNameWithoutExtension(file) + "_" + suffix + getFileExtension(file));
+            if (correctFile.exists()) {
+                correctFile = new File(file.getParentFile(), name + "_" + suffix + extension);
                 suffix++;
+            } else {
+                return correctFile;
             }
         }
     }
@@ -49,12 +59,22 @@ public class FileUtil {
         try {
             Runtime.getRuntime().exec("explorer /select,\"" + file.getAbsolutePath() + "\"");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("openFileDirectory", e);
         }
     }
 
-    public static String getCostTimeDescription(long time) {
+    public static String formatTime(long time) {
         return NumberFormat.getNumberInstance().format(time / 1000.0) + " 秒";
+    }
+
+    public static void ensureDirectoryAvailable(@NotNull File outputDirectory) {
+        if (outputDirectory.exists() && outputDirectory.isDirectory()) {
+            LOGGER.info(outputDirectory + " exists");
+            return;
+        }
+
+        boolean mkdirsSuccess = outputDirectory.mkdirs();
+        LOGGER.info(outputDirectory + " mkdirs " + mkdirsSuccess);
     }
 
 }

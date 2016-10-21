@@ -1,5 +1,6 @@
 package com.getting.util.executor;
 
+import com.getting.util.FileUtil;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import javafx.beans.property.SimpleStringProperty;
@@ -56,30 +57,18 @@ public class Executor {
         copyExecutorToTempDirectory();
     }
 
-    private void ensureOutputDirectoryAvailable(File outputDirectory) {
-        if (outputDirectory == null) {
-            return;
-        }
-
-        if (outputDirectory.exists() && outputDirectory.isDirectory()) {
-            LOGGER.info(outputDirectory + " exists");
-            return;
-        }
-
-        boolean mkdirsSuccess = outputDirectory.mkdirs();
-        LOGGER.info(outputDirectory + " mkdirs " + mkdirsSuccess);
-    }
-
     @Nullable
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
-        ensureOutputDirectoryAvailable(parameters.getOutputDirectory());
+        FileUtil.ensureDirectoryAvailable(parameters.getOutputDirectory());
 
         // cannot execute two process together
         assert executor != null;
 
-        final long startTime = System.currentTimeMillis();
+        LOGGER.warn("execute()");
+
         try {
+            ExecuteResult result = new ExecuteResult();
             List<String> command = new ArrayList<>();
             command.add(executorFile.getAbsolutePath());
             command.addAll(parameters.build());
@@ -104,7 +93,9 @@ public class Executor {
                 }
             }
 
-            return new ExecuteResult(normalExecute ? (executor.waitFor() == 0 ? ExecuteResult.Status.SUCCESS : ExecuteResult.Status.FAIL) : ExecuteResult.Status.CANCELED, System.currentTimeMillis() - startTime, messages);
+            result.setStatus(normalExecute ? (executor.waitFor() == 0 ? ExecuteResult.Status.SUCCESS : ExecuteResult.Status.FAIL) : ExecuteResult.Status.CANCELED);
+            result.setMessages(messages);
+            return result;
         } catch (IOException | InterruptedException e) {
             LOGGER.error("execute", e);
         } finally {
@@ -116,6 +107,7 @@ public class Executor {
     }
 
     public void cancel() {
+        LOGGER.warn("cancel()");
         if (executor == null) {
             return;
         }
@@ -128,6 +120,7 @@ public class Executor {
      * Another way to destroy the process
      */
     public void forceCancel() {
+        LOGGER.warn("forceCancel()");
         if (executor == null) {
             return;
         }
@@ -155,7 +148,7 @@ public class Executor {
             }
             process.waitFor();
         } catch (InterruptedException | IOException e) {
-            LOGGER.error(e.toString());
+            LOGGER.error("forceCancel", e);
         }
     }
 
