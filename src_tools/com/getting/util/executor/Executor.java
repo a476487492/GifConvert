@@ -60,7 +60,9 @@ public class Executor {
     @Nullable
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
-        FileUtil.ensureDirectoryAvailable(parameters.getOutputDirectory());
+        if (parameters.getOutputDirectory() != null) {
+            FileUtil.ensureDirectoryAvailable(parameters.getOutputDirectory());
+        }
 
         // cannot execute two process together
         assert executor != null;

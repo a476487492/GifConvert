@@ -24,7 +24,7 @@ public class FfmpegUtil {
      * @param messages Output of "ffmpeg -i file"
      */
     @Nullable
-    public static Point parseVideoSize(@NotNull List<String> messages) {
+    private static Point parseVideoSize(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher videoSizeMatcher = VIDEO_SIZE_PATTERN.matcher(token);
@@ -40,7 +40,7 @@ public class FfmpegUtil {
     /**
      * @param messages Output of "ffmpeg -i file"
      */
-    public static double parseFrameRate(@NotNull List<String> messages) {
+    private static double parseFrameRate(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher frameRateMatcher = VIDEO_FRAME_RATE_PATTERN.matcher(token);
@@ -56,7 +56,7 @@ public class FfmpegUtil {
     /**
      * @param messages Output of "ffmpeg -i file"
      */
-    public static double parseDuration(@NotNull List<String> messages) {
+    private static double parseDuration(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher videoDurationMatcher = DURATION_PATTERN.matcher(token);
@@ -73,7 +73,7 @@ public class FfmpegUtil {
      * @param messages Output of "ffmpeg -i file"
      */
     @Nullable
-    public static String parseDurationDescription(@NotNull List<String> messages) {
+    private static String parseDurationDescription(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
                 Matcher videoDurationMatcher = DURATION_PATTERN.matcher(token);
@@ -101,6 +101,9 @@ public class FfmpegUtil {
         return null;
     }
 
+    /**
+     * @param message Output of "ffmpeg -i input output"
+     */
     public static double getConvertSpeed(@NotNull String message) {
         for (String split : message.split(" ")) {
             Matcher matcher = CONVERT_SPEED_PATTERN.matcher(split);
@@ -121,6 +124,62 @@ public class FfmpegUtil {
         public Duration(String description, double duration) {
             this.description = description;
             this.duration = duration;
+        }
+
+    }
+
+    public static VideoInfo parseVideoInfo(@NotNull List<String> messages) {
+        final Point videoSize = parseVideoSize(messages);
+        if (videoSize == null) {
+            return null;
+        }
+
+        final double frameRate = parseFrameRate(messages);
+        if (frameRate < 0) {
+            return null;
+        }
+
+        final String durationDescription = parseDurationDescription(messages);
+        if (durationDescription == null) {
+            return null;
+        }
+
+        final double duration = parseDuration(messages);
+        if (duration < 0) {
+            return null;
+        }
+
+        return new VideoInfo(videoSize, frameRate, durationDescription, duration);
+    }
+
+    public static class VideoInfo {
+
+        private final Point videoSize;
+        private final double frameRate;
+        private final String durationDescription;
+        private final double duration;
+
+        public VideoInfo(@NotNull Point videoSize, double frameRate, @NotNull String durationDescription, double duration) {
+            this.videoSize = videoSize;
+            this.frameRate = frameRate;
+            this.durationDescription = durationDescription;
+            this.duration = duration;
+        }
+
+        public String getDurationDescription() {
+            return durationDescription;
+        }
+
+        /**
+         * @return second
+         */
+        public double getDuration() {
+            return duration;
+        }
+
+        @Override
+        public String toString() {
+            return "" + videoSize.x + "x" + videoSize.y + ", " + frameRate + "fps, " + durationDescription;
         }
 
     }
