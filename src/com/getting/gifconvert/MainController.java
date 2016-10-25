@@ -2,10 +2,7 @@ package com.getting.gifconvert;
 
 import binding.VideoDurationLabelFormatter;
 import binding.VideoDurationStringFormatter;
-import com.getting.util.AsyncTask;
-import com.getting.util.FileUtil;
-import com.getting.util.Looper;
-import com.getting.util.PathRecord;
+import com.getting.util.*;
 import com.getting.util.binding.NullableObjectStringFormatter;
 import com.getting.util.executor.ExecuteResult;
 import javafx.beans.property.ObjectProperty;
@@ -281,7 +278,7 @@ public class MainController implements Initializable {
                 return;
             }
 
-            showNotificationForAWhile(result.getStatus() == ExecuteResult.Status.SUCCESS ? "转换时间：" + FileUtil.formatTime(result.getCostTime()) + "，转换后大小：" + FileUtil.formatFileSize(parameters.getOutputFile()) : "转换失败！！是否选择了有效的视频文件？");
+            showNotificationForAWhile(result.getStatus() == ExecuteResult.Status.SUCCESS ? "转换时间：" + TimeUtil.formatTime(result.getCostTime()) + "，转换后大小：" + FileUtil.formatFileSize(parameters.getOutputFile()) : "转换失败！！是否选择了有效的视频文件？");
         }
 
         @Override

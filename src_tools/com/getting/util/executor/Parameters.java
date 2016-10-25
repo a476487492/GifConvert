@@ -1,6 +1,7 @@
 package com.getting.util.executor;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -12,7 +13,7 @@ public abstract class Parameters {
     @NotNull
     public abstract List<String> build();
 
-    @NotNull
+    @Nullable
     public abstract File getOutputDirectory();
 
     public boolean hasDone() {

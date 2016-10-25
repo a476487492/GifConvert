@@ -33,7 +33,7 @@ public class GifConverter extends Executor {
             return;
         }
 
-        updateVideoInfoOnUiThread(FfmpegUtil.parseVideoInfo(result.getMessages()));
+        updateVideoInfoOnUiThread(FfmpegUtil.getVideoInfo(result.getMessages()));
     }
 
     public ExecuteResult convert(@NotNull GifConvertParameters parameters) {

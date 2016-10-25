@@ -16,6 +16,7 @@ public class FileUtil {
     private static final int MB = 1024 * KB;
     private static final int GB = 1024 * MB;
 
+    @NotNull
     public static String formatFileSize(@NotNull File file) {
         if (file.length() < MB) {
             return String.format("%.2f KB", 1.0 * file.length() / KB);
@@ -26,6 +27,7 @@ public class FileUtil {
         }
     }
 
+    @NotNull
     public static String getFileNameWithoutExtension(@NotNull File file) {
         String name = file.getName();
         return name.substring(0, name.lastIndexOf("."));
@@ -35,11 +37,13 @@ public class FileUtil {
      * @param file
      * @return ex.: .mkv
      */
+    @NotNull
     public static String getFileExtension(@NotNull File file) {
         String name = file.getName();
         return name.substring(name.lastIndexOf("."), name.length());
     }
 
+    @NotNull
     public static File ensureFileNameAvailable(@NotNull File file) {
         final String name = getFileNameWithoutExtension(file);
         final String extension = getFileExtension(file);
@@ -61,10 +65,6 @@ public class FileUtil {
         } catch (IOException e) {
             LOGGER.error("openFileDirectory", e);
         }
-    }
-
-    public static String formatTime(long time) {
-        return NumberFormat.getNumberInstance().format(time / 1000.0) + " 秒";
     }
 
     public static void ensureDirectoryAvailable(@NotNull File outputDirectory) {

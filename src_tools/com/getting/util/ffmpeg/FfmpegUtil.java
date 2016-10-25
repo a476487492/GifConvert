@@ -128,7 +128,7 @@ public class FfmpegUtil {
 
     }
 
-    public static VideoInfo parseVideoInfo(@NotNull List<String> messages) {
+    public static VideoInfo getVideoInfo(@NotNull List<String> messages) {
         final Point videoSize = parseVideoSize(messages);
         if (videoSize == null) {
             return null;

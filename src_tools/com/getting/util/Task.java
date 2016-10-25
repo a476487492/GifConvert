@@ -1,13 +1,14 @@
 package com.getting.util;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 
 public abstract class Task implements Comparable<Task>, Runnable {
 
     private final Long timeRunAt;
     private final Object id;
 
-    public Task(Object id, long delay) {
+    public Task(@Nullable Object id, long delay) {
         this.id = id;
         this.timeRunAt = delay + System.currentTimeMillis();
     }
