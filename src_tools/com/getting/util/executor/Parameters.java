@@ -5,16 +5,22 @@ import com.sun.istack.internal.NotNull;
 import java.io.File;
 import java.util.List;
 
-public interface Parameters {
+public abstract class Parameters {
+
+    private boolean hasDone;
 
     @NotNull
-    List<String> build();
+    public abstract List<String> build();
 
     @NotNull
-    File getOutputDirectory();
+    public abstract File getOutputDirectory();
 
-    boolean hasDone();
+    public boolean hasDone() {
+        return hasDone;
+    }
 
-    void setHasDone();
+    public void setHasDone() {
+        hasDone = true;
+    }
 
 }

@@ -65,7 +65,7 @@ public class Executor {
         // cannot execute two process together
         assert executor != null;
 
-        LOGGER.warn("execute()");
+        LOGGER.info("execute()");
 
         try {
             ExecuteResult result = new ExecuteResult();
@@ -107,7 +107,7 @@ public class Executor {
     }
 
     public void cancel() {
-        LOGGER.warn("cancel()");
+        LOGGER.info("cancel()");
         if (executor == null) {
             return;
         }
@@ -120,7 +120,7 @@ public class Executor {
      * Another way to destroy the process
      */
     public void forceCancel() {
-        LOGGER.warn("forceCancel()");
+        LOGGER.info("forceCancel()");
         if (executor == null) {
             return;
         }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ExecuteResult {
 
-    private long startTime;
+    private final long startTime;
     private long endTime;
 
     private Status status = Status.FAIL;
@@ -18,24 +18,24 @@ public class ExecuteResult {
         startTime = System.currentTimeMillis();
     }
 
-    public void setStatus(@NotNull Status status) {
-        this.status = status;
-        endTime = System.currentTimeMillis();
-    }
-
-    public void setMessages(@NotNull List<String> messages) {
-        this.messages = messages;
-        endTime = System.currentTimeMillis();
-    }
-
     @NotNull
     public Status getStatus() {
         return status;
     }
 
+    public void setStatus(@NotNull Status status) {
+        this.status = status;
+        endTime = System.currentTimeMillis();
+    }
+
     @NotNull
     public List<String> getMessages() {
         return messages;
+    }
+
+    public void setMessages(@NotNull List<String> messages) {
+        this.messages = messages;
+        endTime = System.currentTimeMillis();
     }
 
     public long getCostTime() {

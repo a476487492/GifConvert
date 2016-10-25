@@ -40,7 +40,6 @@ public class FfmpegUtil {
     /**
      * @param messages Output of "ffmpeg -i file"
      */
-    @Nullable
     public static double parseFrameRate(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
@@ -57,7 +56,6 @@ public class FfmpegUtil {
     /**
      * @param messages Output of "ffmpeg -i file"
      */
-    @Nullable
     public static double parseDuration(@NotNull List<String> messages) {
         for (String message : messages) {
             for (String token : message.split(",")) {
@@ -122,7 +120,6 @@ public class FfmpegUtil {
 
         public Duration(String description, double duration) {
             this.description = description;
-
             this.duration = duration;
         }
 
