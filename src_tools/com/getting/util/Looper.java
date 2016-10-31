@@ -1,5 +1,6 @@
 package com.getting.util;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ public class Looper {
 
     private final List<Task> tasks = new ArrayList<>();
 
+    @Nullable
     private Task currentTask;
 
     public Looper() {
@@ -48,6 +50,7 @@ public class Looper {
                     }
 
                     LOGGER.info(currentTask + " run ");
+                    assert currentTask != null;
                     currentTask.run();
                     currentTask = null;
                 }

@@ -4,13 +4,13 @@ import com.getting.util.executor.ExecuteResult;
 import com.getting.util.executor.Executor;
 import com.getting.util.ffmpeg.FfmpegUtil;
 import com.getting.util.ffmpeg.VideoInfoParameters;
-import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -29,6 +29,9 @@ public class GifConverter extends Executor {
         updateProgressOnUiThread(Double.NEGATIVE_INFINITY);
         ExecuteResult result = execute(new VideoInfoParameters(file), true);
         updateProgressOnUiThread(Double.NaN);
+        if(result == null){
+            return;
+        }
         if (result.getStatus() == ExecuteResult.Status.CANCELED) {
             return;
         }
@@ -57,6 +60,7 @@ public class GifConverter extends Executor {
         return convertResult;
     }
 
+    @NotNull
     public ObjectProperty<FfmpegUtil.VideoInfo> videoInfoProperty() {
         return videoInfo;
     }
@@ -73,6 +77,7 @@ public class GifConverter extends Executor {
         return executeProgress.get();
     }
 
+    @NotNull
     public DoubleProperty executeProgressProperty() {
         return executeProgress;
     }

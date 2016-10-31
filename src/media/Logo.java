@@ -1,5 +1,6 @@
 package media;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,7 @@ public class Logo {
         this.logo = logo;
     }
 
+    @NotNull
     public File create() {
         File logoFile = new File(System.getProperty("java.io.tmpdir"), "ffmpeg-logo.png");
         Font font = new Font("微软雅黑", Font.PLAIN, 15);

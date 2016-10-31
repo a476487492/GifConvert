@@ -1,6 +1,7 @@
 package com.getting.util;
 
 import javafx.application.Platform;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AsyncTask<R> extends Task {
 
@@ -11,6 +12,7 @@ public abstract class AsyncTask<R> extends Task {
     public void preTaskOnUi() {
     }
 
+    @Nullable
     public abstract R runTask();
 
     public void postTaskOnUi(R result) {

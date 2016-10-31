@@ -1,8 +1,8 @@
 package com.getting.util;
 
-import com.sun.istack.internal.NotNull;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.prefs.Preferences;
@@ -11,6 +11,7 @@ import java.util.prefs.Preferences;
 public class PathRecord {
 
     private final String key;
+    @NotNull
     private final Class referClass;
     private final ObjectProperty<File> path = new SimpleObjectProperty<>();
 
@@ -29,6 +30,7 @@ public class PathRecord {
         return path.get();
     }
 
+    @NotNull
     public ObjectProperty<File> pathProperty() {
         return path;
     }

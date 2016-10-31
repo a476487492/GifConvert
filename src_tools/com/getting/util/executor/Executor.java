@@ -1,10 +1,10 @@
 package com.getting.util.executor;
 
 import com.getting.util.FileUtil;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +18,11 @@ public class Executor {
 
     protected final StringProperty executorOutputMessage = new SimpleStringProperty();
     private final Class loaderClass;
+    @NotNull
     private final String executorName;
+    @NotNull
     private final File executorFile;
+    @Nullable
     private Process executor;
     private boolean normalExecute;
 
@@ -98,7 +101,7 @@ public class Executor {
             result.setStatus(normalExecute ? (executor.waitFor() == 0 ? ExecuteResult.Status.SUCCESS : ExecuteResult.Status.FAIL) : ExecuteResult.Status.CANCELED);
             result.setMessages(messages);
             return result;
-        } catch (IOException | InterruptedException e) {
+        } catch (@NotNull IOException | InterruptedException e) {
             LOGGER.error("execute", e);
         } finally {
             executor = null;
@@ -149,7 +152,7 @@ public class Executor {
                 LOGGER.info(message);
             }
             process.waitFor();
-        } catch (InterruptedException | IOException e) {
+        } catch (@NotNull InterruptedException | IOException e) {
             LOGGER.error("forceCancel", e);
         }
     }

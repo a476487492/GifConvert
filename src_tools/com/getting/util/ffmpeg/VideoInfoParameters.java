@@ -1,7 +1,8 @@
 package com.getting.util.ffmpeg;
 
 import com.getting.util.executor.Parameters;
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class VideoInfoParameters extends Parameters {
         this.video = video;
     }
 
+    @NotNull
     @Override
     public List<String> build() {
         List<String> command = new ArrayList<>();
@@ -23,6 +25,7 @@ public class VideoInfoParameters extends Parameters {
         return command;
     }
 
+    @Nullable
     @Override
     public File getOutputDirectory() {
         return null;

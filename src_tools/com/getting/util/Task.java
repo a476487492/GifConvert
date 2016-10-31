@@ -1,10 +1,12 @@
 package com.getting.util;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Task implements Comparable<Task>, Runnable {
 
+    @NotNull
     private final Long timeRunAt;
     private final Object id;
 
@@ -29,6 +31,7 @@ public abstract class Task implements Comparable<Task>, Runnable {
         return timeRunAt.compareTo(o.timeRunAt);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return super.toString() + "{" + String.valueOf(id) + "}";

@@ -24,6 +24,10 @@ import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PlusMinusSlider;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +39,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
     private static final Object MSG_CONVERT_VIDEO = new Object();
 
@@ -68,6 +74,7 @@ public class MainController implements Initializable {
     private NotificationPane notificationPane;
     @FXML
     private StatusBar statusBar;
+    @NotNull
     private ObjectProperty<File> inputVideo = new SimpleObjectProperty<>();
 
     @Override
@@ -149,7 +156,7 @@ public class MainController implements Initializable {
         try {
             java.awt.Desktop.getDesktop().open(inputVideo.get().getParentFile());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("onOpenSaveDirectory", e);
         }
     }
 
@@ -190,12 +197,12 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void onLowAdjust(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
+    public void onLowAdjust(@NotNull PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
         inputVideoDurationView.setLowValue(inputVideoDurationView.getLowValue() + Math.copySign(0.1, plusMinusEvent.getValue()));
     }
 
     @FXML
-    public void onHighAdjust(PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
+    public void onHighAdjust(@NotNull PlusMinusSlider.PlusMinusEvent plusMinusEvent) {
         inputVideoDurationView.setHighValue(inputVideoDurationView.getHighValue() + Math.copySign(0.1, plusMinusEvent.getValue()));
     }
 
@@ -210,6 +217,7 @@ public class MainController implements Initializable {
             notificationPane.hide();
         }
 
+        @Nullable
         @Override
         public Void runTask() {
             return null;
@@ -223,6 +231,7 @@ public class MainController implements Initializable {
             super(null, 0);
         }
 
+        @Nullable
         @Override
         public Void runTask() {
             gifConverter.updateVideoInfo(inputVideo.get());
@@ -238,6 +247,7 @@ public class MainController implements Initializable {
 
     private class GifConvertTask extends AsyncTask<ExecuteResult> {
 
+        @NotNull
         private final GifConvertParameters parameters;
 
         public GifConvertTask(long delay) {
@@ -263,7 +273,7 @@ public class MainController implements Initializable {
         }
 
         @Override
-        public void postTaskOnUi(ExecuteResult result) {
+        public void postTaskOnUi(@Nullable ExecuteResult result) {
             if (result == null) {
                 return;
             }

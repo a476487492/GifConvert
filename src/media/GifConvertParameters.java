@@ -1,6 +1,7 @@
 package media;
 
 import com.getting.util.executor.Parameters;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class GifConvertParameters extends Parameters {
     /**
      * ffmpeg [global_options] {[input_file_options] -i input_file} ... {[output_file_options] output_file} ...
      */
+    @NotNull
     @Override
     public List<String> build() {
         List<String> command = new ArrayList<>();
@@ -78,6 +80,7 @@ public class GifConvertParameters extends Parameters {
         return getOutputFile().getParentFile();
     }
 
+    @NotNull
     public File getOutputFile() {
         return new File(video.getParent(), video.getName() + ".gif");
     }

@@ -1,7 +1,8 @@
 package com.getting.util.ffmpeg;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
@@ -115,19 +116,6 @@ public class FfmpegUtil {
         return -1;
     }
 
-    public static final class Duration {
-
-        public final String description;
-
-        public final double duration;
-
-        public Duration(String description, double duration) {
-            this.description = description;
-            this.duration = duration;
-        }
-
-    }
-
     public static VideoInfo getVideoInfo(@NotNull List<String> messages) {
         final Point videoSize = parseVideoSize(messages);
         if (videoSize == null) {
@@ -150,6 +138,19 @@ public class FfmpegUtil {
         }
 
         return new VideoInfo(videoSize, frameRate, durationDescription, duration);
+    }
+
+    public static final class Duration {
+
+        public final String description;
+
+        public final double duration;
+
+        public Duration(String description, double duration) {
+            this.description = description;
+            this.duration = duration;
+        }
+
     }
 
     public static class VideoInfo {
@@ -177,6 +178,7 @@ public class FfmpegUtil {
             return duration;
         }
 
+        @NotNull
         @Override
         public String toString() {
             return "" + videoSize.x + "x" + videoSize.y + ", " + frameRate + "fps, " + durationDescription;
