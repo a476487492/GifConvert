@@ -288,7 +288,7 @@ public class MainController implements Initializable {
                 return;
             }
 
-            showNotificationForAWhile(result.getStatus() == ExecuteResult.Status.SUCCESS ? "转换时间：" + TimeUtil.formatTime(result.getCostTime()) + "，转换后大小：" + FileUtil.formatFileSize(parameters.getOutputFile()) : "转换失败！！是否选择了有效的视频文件？");
+            showNotificationForAWhile(result.getStatus() == ExecuteResult.Status.SUCCESS ? "转换时间：" + TimeUtil.formatTime(result.getCostTime()) + "，转换后大小：" + MyFileUtil.formatFileSize(parameters.getOutputFile()) : "转换失败！！是否选择了有效的视频文件？");
         }
 
         @Override

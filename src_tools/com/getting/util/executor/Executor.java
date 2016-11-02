@@ -1,6 +1,6 @@
 package com.getting.util.executor;
 
-import com.getting.util.FileUtil;
+import com.getting.util.MyFileUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +64,7 @@ public class Executor {
     protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
         ensureExecutorAvailable();
         if (parameters.getOutputDirectory() != null) {
-            FileUtil.ensureDirectoryAvailable(parameters.getOutputDirectory());
+            MyFileUtil.ensureDirectoryAvailable(parameters.getOutputDirectory());
         }
 
         // cannot execute two process together

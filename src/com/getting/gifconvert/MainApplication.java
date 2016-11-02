@@ -16,7 +16,6 @@ public class MainApplication extends Application {
 
     @Override
     public void start(@NotNull Stage primaryStage) throws Exception {
-
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setResizable(false);
         primaryStage.setTitle("视频转Gif");
