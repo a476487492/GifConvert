@@ -3,6 +3,7 @@ package com.getting.gifconvert;
 import binding.VideoDurationLabelFormatter;
 import binding.VideoDurationStringFormatter;
 import com.getting.util.*;
+import com.getting.util.annotation.UiThread;
 import com.getting.util.binding.NullableObjectStringFormatter;
 import com.getting.util.executor.ExecuteResult;
 import javafx.beans.property.ObjectProperty;
@@ -18,7 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import media.GifConvertParameters;
+import media.GifConvertExecuteTask;
 import media.GifConverter;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PlusMinusSlider;
@@ -125,7 +126,7 @@ public class MainController implements Initializable {
     @FXML
     private void onChooseVideo() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("视频文件", GifConvertParameters.SUPPORT_VIDEO_FORMATS));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("视频文件", GifConvertExecuteTask.SUPPORT_VIDEO_FORMATS));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("所有文件", "*.*"));
         if (lastVisitPathRecord.getPath().isDirectory()) {
             fileChooser.setInitialDirectory(lastVisitPathRecord.getPath());
@@ -160,6 +161,7 @@ public class MainController implements Initializable {
         }
     }
 
+    @UiThread
     private void reloadGifConvert(long delay) {
         convertLoop.removeTask(MSG_CONVERT_VIDEO);
 
@@ -186,10 +188,12 @@ public class MainController implements Initializable {
         convertLoop.postTask(new GifConvertTask(delay));
     }
 
+    @UiThread
     private void showLoadingImage() {
         gifPreviewView.setImage(loadingImage);
     }
 
+    @UiThread
     private void showNotificationForAWhile(String message) {
         notificationPane.show(message);
 
@@ -248,12 +252,12 @@ public class MainController implements Initializable {
     private class GifConvertTask extends AsyncTask<ExecuteResult> {
 
         @NotNull
-        private final GifConvertParameters parameters;
+        private final GifConvertExecuteTask parameters;
 
         public GifConvertTask(long delay) {
             super(MSG_CONVERT_VIDEO, delay);
             String logo = addLogoView.isSelected() ? new SimpleDateFormat().format(new Date()) : " ";
-            parameters = new GifConvertParameters(inputVideo.get(),
+            parameters = new GifConvertExecuteTask(inputVideo.get(),
                     gifFrameRateView.getValue(),
                     gifScaleView.getValue(),
                     inputVideoDurationView.getLowValue(),

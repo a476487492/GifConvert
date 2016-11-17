@@ -7,12 +7,12 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.List;
 
-public abstract class Parameters {
+public abstract class ExecuteTask {
 
     private boolean hasDone;
 
     @NotNull
-    public abstract List<String> build();
+    public abstract List<String> buildParameters();
 
     @Nullable
     public abstract File getOutputDirectory();

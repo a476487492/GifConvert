@@ -61,10 +61,10 @@ public class Executor {
     }
 
     @Nullable
-    protected ExecuteResult execute(@NotNull Parameters parameters, boolean needMessages) {
+    protected ExecuteResult execute(@NotNull ExecuteTask executeTask, boolean needMessages) {
         ensureExecutorAvailable();
-        if (parameters.getOutputDirectory() != null) {
-            MyFileUtil.ensureDirectoryAvailable(parameters.getOutputDirectory());
+        if (executeTask.getOutputDirectory() != null) {
+            MyFileUtil.ensureDirectoryAvailable(executeTask.getOutputDirectory());
         }
 
         // cannot execute two process together
@@ -76,7 +76,7 @@ public class Executor {
             ExecuteResult result = new ExecuteResult();
             List<String> command = new ArrayList<>();
             command.add(executorFile.getAbsolutePath());
-            command.addAll(parameters.build());
+            command.addAll(executeTask.buildParameters());
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);
             executor = processBuilder.start();
@@ -105,7 +105,7 @@ public class Executor {
             LOGGER.error("execute", e);
         } finally {
             executor = null;
-            parameters.setHasDone();
+            executeTask.setHasDone();
         }
 
         return null;

@@ -3,7 +3,7 @@ package media;
 import com.getting.util.executor.ExecuteResult;
 import com.getting.util.executor.Executor;
 import com.getting.util.ffmpeg.FfmpegUtil;
-import com.getting.util.ffmpeg.VideoInfoParameters;
+import com.getting.util.ffmpeg.VideoInfoExecuteTask;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -27,7 +27,7 @@ public class GifConverter extends Executor {
 
     public void updateVideoInfo(File file) {
         updateProgressOnUiThread(Double.NEGATIVE_INFINITY);
-        ExecuteResult result = execute(new VideoInfoParameters(file), true);
+        ExecuteResult result = execute(new VideoInfoExecuteTask(file), true);
         updateProgressOnUiThread(Double.NaN);
         if (result == null) {
             return;
@@ -39,7 +39,7 @@ public class GifConverter extends Executor {
         updateVideoInfoOnUiThread(FfmpegUtil.getVideoInfo(result.getMessages()));
     }
 
-    public ExecuteResult convert(@NotNull GifConvertParameters parameters) {
+    public ExecuteResult convert(@NotNull GifConvertExecuteTask parameters) {
         updateProgressOnUiThread(Double.NEGATIVE_INFINITY);
 
         ChangeListener<String> progressListener = (observable, oldValue, newValue) -> {

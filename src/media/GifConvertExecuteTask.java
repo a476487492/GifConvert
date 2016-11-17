@@ -1,6 +1,6 @@
 package media;
 
-import com.getting.util.executor.Parameters;
+import com.getting.util.executor.ExecuteTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GifConvertParameters extends Parameters {
+public class GifConvertExecuteTask extends ExecuteTask {
 
     public static final List<String> SUPPORT_VIDEO_FORMATS = Arrays.asList("*.mp4", "*.avi", "*.mkv", "*.mov", "*.flv");
 
@@ -26,7 +26,7 @@ public class GifConvertParameters extends Parameters {
 
     private final double convertDuration;
 
-    public GifConvertParameters(File video, double outputFrameRate, double outputScale, double convertStartTime, double convertDuration, boolean reverse, String logo) {
+    public GifConvertExecuteTask(File video, double outputFrameRate, double outputScale, double convertStartTime, double convertDuration, boolean reverse, String logo) {
         this.video = video;
         this.outputFrameRate = outputFrameRate;
         this.outputScale = outputScale;
@@ -45,7 +45,7 @@ public class GifConvertParameters extends Parameters {
      */
     @NotNull
     @Override
-    public List<String> build() {
+    public List<String> buildParameters() {
         List<String> command = new ArrayList<>();
         command.add("-y");
         command.add("-ss");
