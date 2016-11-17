@@ -100,6 +100,13 @@ public class Looper {
         }
     }
 
+    public void removePendingTasks() {
+        synchronized (lock) {
+            tasks.clear();
+            lock.notifyAll();
+        }
+    }
+
     public boolean isAllDone() {
         synchronized (lock) {
             return tasks.isEmpty() && currentTask == null;

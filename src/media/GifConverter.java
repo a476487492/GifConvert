@@ -29,7 +29,7 @@ public class GifConverter extends Executor {
         updateProgressOnUiThread(Double.NEGATIVE_INFINITY);
         ExecuteResult result = execute(new VideoInfoParameters(file), true);
         updateProgressOnUiThread(Double.NaN);
-        if(result == null){
+        if (result == null) {
             return;
         }
         if (result.getStatus() == ExecuteResult.Status.CANCELED) {
