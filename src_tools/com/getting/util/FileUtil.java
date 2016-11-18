@@ -1,6 +1,5 @@
 package com.getting.util;
 
-import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
-public class MyFileUtil {
+public class FileUtil {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyFileUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
 
     private static final double KB = 1024;
     private static final double MB = 1024 * KB;
@@ -29,18 +28,38 @@ public class MyFileUtil {
 
     @NotNull
     public static File ensureFileNameAvailable(@NotNull File file) {
-        final String baseName = FilenameUtils.getBaseName(file.getAbsolutePath());
-        final String extension = FilenameUtils.getExtension(file.getAbsolutePath());
+        final String baseName = getFileNameWithoutExtension(file);
+        final String extension = getFileNameExtension(file);
         File correctFile = file;
         int suffix = 1;
         while (true) {
             if (correctFile.exists()) {
-                correctFile = new File(file.getParentFile(), baseName + "_" + suffix + "." + extension);
+                correctFile = new File(file.getParentFile(), baseName + "_" + suffix + extension);
                 suffix++;
             } else {
                 return correctFile;
             }
         }
+    }
+
+    @NotNull
+    public static String getFileNameWithoutExtension(@NotNull File file) {
+        final String fileName = file.getName();
+        if (!fileName.contains(".")) {
+            return fileName;
+        }
+
+        return fileName.substring(0, fileName.lastIndexOf("."));
+    }
+
+    @NotNull
+    public static String getFileNameExtension(@NotNull File file) {
+        final String fileName = file.getName();
+        if (!fileName.contains(".")) {
+            return "";
+        }
+
+        return fileName.substring(fileName.lastIndexOf("."), fileName.length());
     }
 
     public static void openFileDirectory(@NotNull File file) {
