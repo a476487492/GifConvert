@@ -51,6 +51,7 @@ public class MainController implements Initializable {
 
     private final Image loadingImage = new Image(MainController.class.getResource("loading.gif").toExternalForm(), true);
     private final PathRecord lastVisitPathRecord = new PathRecord(MainController.class, "last visit directory");
+
     @FXML
     private ImageView gifPreviewView;
     @FXML
