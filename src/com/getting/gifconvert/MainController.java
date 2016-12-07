@@ -105,7 +105,10 @@ public class MainController implements Initializable {
             addLogoView.selectedProperty().addListener(convertParameterChangeListener);
         }
 
-        inputVideo.addListener((observable, oldValue, newValue) -> convertLoop.postTask(new ReloadVideoInfoTask()));
+        inputVideo.addListener((observable, oldValue, newValue) -> {
+            showLoadingImage();
+            convertLoop.postTask(new ReloadVideoInfoTask());
+        });
 
         gifConverter.videoInfoProperty().addListener((observable, oldValue, newValue) -> {
             final double duration = newValue.getDuration();
