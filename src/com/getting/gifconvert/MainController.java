@@ -6,6 +6,7 @@ import com.getting.util.*;
 import com.getting.util.annotation.UiThread;
 import com.getting.util.binding.NullableObjectStringFormatter;
 import com.getting.util.executor.ExecuteResult;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -25,6 +26,7 @@ import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PlusMinusSlider;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
+import org.controlsfx.control.action.Action;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -125,6 +127,18 @@ public class MainController implements Initializable {
                 inputVideo.set(files.get(0));
             }
         });
+
+        Platform.runLater(this::addExitListener);
+    }
+
+    private void addExitListener() {
+        gifPreviewView.getScene().getWindow().setOnCloseRequest(event -> {
+            convertLoop.removeAllTasks();
+            convertLoop.quit();
+            uiLoop.removeAllTasks();
+            uiLoop.quit();
+            Platform.exit();
+        });
     }
 
     @FXML
@@ -141,11 +155,6 @@ public class MainController implements Initializable {
             inputVideo.set(chooseFile);
             lastVisitPathRecord.set(chooseFile.getParentFile());
         }
-
-        gifPreviewView.getScene().getWindow().setOnCloseRequest(event -> {
-            convertLoop.removeAllTasks();
-            uiLoop.removeAllTasks();
-        });
     }
 
     @FXML

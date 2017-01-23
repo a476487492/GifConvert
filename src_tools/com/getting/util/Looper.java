@@ -11,6 +11,8 @@ import java.util.List;
 
 public class Looper {
 
+    private boolean continueRun = true;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Looper.class);
 
     private final Object lock = new Object();
@@ -25,10 +27,11 @@ public class Looper {
 
             @Override
             public void run() {
-                while (true) {
+                while (continueRun) {
                     synchronized (lock) {
                         if (tasks.isEmpty()) {
                             try {
+                                LOGGER.info("wait");
                                 lock.wait();
                             } catch (InterruptedException e) {
                                 LOGGER.error("run", e);
@@ -39,6 +42,7 @@ public class Looper {
                         final long waitTime = tasks.get(0).getTimeRunAt() - System.currentTimeMillis();
                         if (waitTime > 0) {
                             try {
+                                LOGGER.info("wait: " + waitTime + "ms");
                                 lock.wait(waitTime);
                             } catch (InterruptedException e) {
                                 LOGGER.error("run", e);
@@ -57,10 +61,16 @@ public class Looper {
             }
 
         };
-        thread.setDaemon(true);
         thread.start();
     }
 
+    public void quit() {
+        LOGGER.info("quit");
+        synchronized (lock) {
+            continueRun = false;
+            lock.notifyAll();
+        }
+    }
 
     public void postTask(Task task) {
         LOGGER.info("postTask: " + task);
@@ -90,6 +100,7 @@ public class Looper {
     }
 
     public void removeAllTasks() {
+        LOGGER.info("removeAllTasks");
         synchronized (lock) {
             tasks.clear();
             lock.notifyAll();
