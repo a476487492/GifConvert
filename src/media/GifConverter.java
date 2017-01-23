@@ -16,7 +16,7 @@ import java.io.File;
 
 public class GifConverter extends Executor {
 
-    private static final String CONVERTER_NAME = "ffmpeg-20160915-6f062eb-win64-static.exe";
+    private static final String CONVERTER_NAME = "ffmpeg-20170121-d60f090-win64-static.exe";
 
     private final ObjectProperty<FfmpegUtil.VideoInfo> videoInfo = new SimpleObjectProperty<>();
     private final DoubleProperty executeProgress = new SimpleDoubleProperty(Double.NaN);
