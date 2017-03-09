@@ -26,7 +26,6 @@ import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PlusMinusSlider;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.StatusBar;
-import org.controlsfx.control.action.Action;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -48,8 +47,8 @@ public class MainController implements Initializable {
     private static final Object MSG_CONVERT_VIDEO = new Object();
 
     private final GifConverter gifConverter = new GifConverter();
-    private final Looper convertLoop = new Looper();
-    private final Looper uiLoop = new Looper();
+    private final Looper convertLoop = new Looper("convert");
+    private final Looper uiLoop = new Looper("Ui");
 
     private final Image loadingImage = new Image(MainController.class.getResource("loading.gif").toExternalForm(), true);
     private final PathRecord lastVisitPathRecord = new PathRecord(MainController.class, "last visit directory");

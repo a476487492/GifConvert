@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class Looper {
@@ -22,50 +21,55 @@ public class Looper {
     @Nullable
     private Task currentTask;
 
-    public Looper() {
-        Thread thread = new Thread() {
-
-            @Override
-            public void run() {
-                while (continueRun) {
-                    synchronized (lock) {
-                        if (tasks.isEmpty()) {
-                            try {
-                                LOGGER.info("wait");
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                LOGGER.error("run", e);
-                            }
-                            continue;
+    public Looper(String name) {
+        Thread thread = new Thread(() -> {
+            LOGGER.info(this + " start run");
+            while (continueRun) {
+                synchronized (lock) {
+                    if (tasks.isEmpty()) {
+                        try {
+                            LOGGER.info(this + " is empty, wait");
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            LOGGER.error("run", e);
                         }
-
-                        final long waitTime = tasks.get(0).getTimeRunAt() - System.currentTimeMillis();
-                        if (waitTime > 0) {
-                            try {
-                                LOGGER.info("wait: " + waitTime + "ms");
-                                lock.wait(waitTime);
-                            } catch (InterruptedException e) {
-                                LOGGER.error("run", e);
-                            }
-                            continue;
-                        }
-
-                        currentTask = tasks.remove(0);
+                        continue;
                     }
 
-                    LOGGER.info(currentTask + " run ");
-                    assert currentTask != null;
+                    final long waitTime = tasks.get(0).getTimeRunAt() - System.currentTimeMillis();
+                    if (waitTime > 0) {
+                        try {
+                            LOGGER.info(this + " is need to wait " + waitTime + "ms");
+                            lock.wait(waitTime);
+                        } catch (InterruptedException e) {
+                            LOGGER.error("run", e);
+                        }
+                        continue;
+                    }
+
+                    currentTask = tasks.remove(0);
+                }
+
+                LOGGER.info(this + " run " + currentTask);
+                try {
                     currentTask.run();
+                } catch (Throwable e) {
+                    LOGGER.error("run", e);
+                }
+
+                synchronized (lock) {
                     currentTask = null;
                 }
             }
 
-        };
+            LOGGER.info(this + "exit");
+        });
+        thread.setName("Thread-" + name);
         thread.start();
     }
 
     public void quit() {
-        LOGGER.info("quit");
+        LOGGER.info(this + " quit");
         synchronized (lock) {
             continueRun = false;
             lock.notifyAll();
@@ -73,7 +77,7 @@ public class Looper {
     }
 
     public void postTask(Task task) {
-        LOGGER.info("postTask: " + task);
+        LOGGER.info(this + " postTask " + task);
         synchronized (lock) {
             tasks.add(task);
             Collections.sort(tasks);
@@ -82,15 +86,9 @@ public class Looper {
     }
 
     public void removeTask(Object id) {
-        LOGGER.info("removeTask: " + id);
+        LOGGER.info(this + " removeTask " + id);
         synchronized (lock) {
-            Iterator<Task> iterator = tasks.iterator();
-            while (iterator.hasNext()) {
-                if (iterator.next().getId() == id) {
-                    iterator.remove();
-                }
-            }
-
+            tasks.removeIf(task -> task.getId() == id);
             lock.notifyAll();
         }
 
@@ -100,7 +98,7 @@ public class Looper {
     }
 
     public void removeAllTasks() {
-        LOGGER.info("removeAllTasks");
+        LOGGER.info(this + " removeAllTasks");
         synchronized (lock) {
             tasks.clear();
             lock.notifyAll();
@@ -112,6 +110,7 @@ public class Looper {
     }
 
     public void removePendingTasks() {
+        LOGGER.info(this + " removePendingTasks");
         synchronized (lock) {
             tasks.clear();
             lock.notifyAll();
