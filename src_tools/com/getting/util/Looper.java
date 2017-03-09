@@ -62,7 +62,7 @@ public class Looper {
                 }
             }
 
-            LOGGER.info(this + "exit");
+            LOGGER.info(this + " exit");
         });
         thread.setName("Thread-" + name);
         thread.start();
