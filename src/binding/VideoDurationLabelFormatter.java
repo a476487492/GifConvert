@@ -1,8 +1,8 @@
 package binding;
 
 import com.getting.util.TimeUtil;
+import com.sun.istack.internal.NotNull;
 import javafx.util.StringConverter;
-import org.jetbrains.annotations.NotNull;
 
 public class VideoDurationLabelFormatter extends StringConverter<Number> {
 

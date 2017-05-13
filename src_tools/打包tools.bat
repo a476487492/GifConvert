@@ -1,1 +1,0 @@
-jar vcf com.getting.tool.jar com/getting/util/*

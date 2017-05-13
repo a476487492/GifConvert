@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 public class MainApplication extends Application {
 
@@ -15,7 +14,7 @@ public class MainApplication extends Application {
     }
 
     @Override
-    public void start(@NotNull Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setResizable(false);
         primaryStage.setTitle("视频转Gif");

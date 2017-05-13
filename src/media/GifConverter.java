@@ -4,13 +4,13 @@ import com.getting.util.executor.ExecuteResult;
 import com.getting.util.executor.Executor;
 import com.getting.util.ffmpeg.FfmpegUtil;
 import com.getting.util.ffmpeg.VideoInfoExecuteTask;
+import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
